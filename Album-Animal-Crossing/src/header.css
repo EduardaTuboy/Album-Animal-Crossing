@@ -1,4 +1,4 @@
-nav {
+header {
   background-color: var(--primary);
   display: flex;
   justify-content: space-between;
@@ -17,33 +17,33 @@ nav {
   width: 80px;
 }
 
-#links {
+nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 800px; /* Taken directly from Figma */
 }
 
-#links a {
+nav a {
   color: var(--text);
   text-decoration: none;
   font-size: 32px;
   font-weight: normal;
 }
 
-#links a.active {
+nav a.active {
   color: var(--secondary);
   text-decoration: none;
   font-size: 32px;
   font-weight: normal;
 }
 
-#links a.hover {
+nav a.hover {
   /* not working for now */
   color: var(--highligh);
 }
 
-#links img {
+nav img {
   width: 100px;
 }
 

@@ -1,0 +1,20 @@
+footer {
+  background-color: var(--primary);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  padding: 50px 100px;
+}
+
+footer p {
+  margin-bottom: 10px;
+}
+
+footer ul {
+  margin-left: 20px;
+}
+
+footer a {
+  color: var(--text);
+  text-decoration: none;
+}
