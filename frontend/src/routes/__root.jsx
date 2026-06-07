@@ -30,18 +30,27 @@ export const Route = createRootRoute({
         <p> Créditos:</p>
         <ul>
           <li>
-            <a href="https://www.figma.com/community/file/1155196388062943961">
+            <a
+              target="_blank"
+              href="https://www.figma.com/community/file/1155196388062943961"
+            >
               {" "}
               Figma por onde a UI foi tirada
             </a>
           </li>
           <li>
-            <a href="https://catwithmonocle.com/news/2020/02/06/animal-crossing-new-horizons-nook-pattern-wallpaper/">
+            <a
+              target="_blank"
+              href="https://catwithmonocle.com/news/2020/02/06/animal-crossing-new-horizons-nook-pattern-wallpaper/"
+            >
               linkedin.com/in/ katherine-manalo manaloka.com Wallpaper
             </a>
           </li>
           <li>
-            <a href="https://animalcrossing.fandom.com/wiki/Villager_list_(New_Horizons)">
+            <a
+              target="_blank"
+              href="https://animalcrossing.fandom.com/wiki/Villager_list_(New_Horizons)"
+            >
               Imagens e informações do villagers:
             </a>
           </li>
