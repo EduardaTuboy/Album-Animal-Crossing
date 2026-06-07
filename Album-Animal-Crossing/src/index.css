@@ -11,3 +11,8 @@
   --text: #ffffff;
   --highligh: #ffeea0;
 }
+
+body {
+  background-image: url("assets/bg.jpg");
+  background-size: 100vw;
+}
