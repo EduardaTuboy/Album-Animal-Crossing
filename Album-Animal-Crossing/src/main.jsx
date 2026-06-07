@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import "./index.css";
+import "./navbar.css";
 import App from "./App.jsx";
 
 // Isso importa as rotas geradas automaticamente pelo plugin do Vite

@@ -5,57 +5,9 @@
   font-family: "Poppins", sans-serif;
 }
 
-nav {
-  background-color: #86caa1;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 22px;
-}
-
-#logo {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 590px; /* Taken directly from Figma */
-}
-
-#logo img {
-  width: 80px;
-}
-
-#links {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 800px; /* Taken directly from Figma */
-}
-
-#links a {
-  color: #fff;
-  text-decoration: none;
-  font-size: 32px;
-  font-weight: normal;
-}
-
-#links a.active {
-  color: #338f66;
-  text-decoration: none;
-  font-size: 32px;
-  font-weight: normal;
-}
-
-#links a.hover {
-  /* not working for now */
-  color: #ffeea0;
-}
-
-#links img {
-  width: 100px;
-}
-
-h1 {
-  color: #fff;
-  font-size: 41px;
-  font-weight: bold;
+:root {
+  --primary: #86caa1;
+  --secondary: #338f66;
+  --text: #ffffff;
+  --highligh: #ffeea0;
 }
