@@ -12,6 +12,7 @@ export const Route = createFileRoute("/album")({
 
 function Album() {
   const [stickers, setStickers] = useState([]);
+  const [currentSpeciesIndex, setCurrentSpeciesIndex] = useState(0);
   const currentUserEmail = "usuario@exemplo.com";
   useEffect(() => {
     const fetchAlbum = async () => {
@@ -31,18 +32,28 @@ function Album() {
     fetchAlbum();
   }, [currentUserEmail]);
 
+  // Extract the category
+  const categories = Array.from(new Set(stickers.map((s) => s.species))).sort();
+  const currentPageCategory = categories[currentSpeciesIndex];
+
+  // Filter stickers per page
+  const stickersInPage = stickers
+    .filter((s) => s.species === currentPageCategory)
+    .sort((a, b) => a.number - b.number);
+
   return (
     <main>
-      <h2 className="chip">Bird</h2>
-
+      <h2 className="chip">
+        {currentPageCategory?.toUpperCase() || "CARREGANDO..."}
+      </h2>
       <div className="stickers">
-        {stickers.map((sticker) => {
+        {stickersInPage.map((sticker) => {
           // Verifica se o usuário tem a figurinha (quantidade maior que 0)
           const isOwned = sticker.amount > 0;
-
           return (
             <Sticker
               key={sticker.number}
+              number={sticker.number}
               name={isOwned ? sticker.name : "???"}
               gender={isOwned ? sticker.gender : "???"}
               image={isOwned ? sticker.image_url : missingSticker}
@@ -51,19 +62,33 @@ function Album() {
                   ? `The ${sticker.personality} ${sticker.species}`
                   : "???"
               }
-              amount={sticker.amount} // Corrigido de 'amout' para 'amount' e passando o valor dinâmico
+              amount={sticker.amount}
             />
           );
         })}
       </div>
 
       <div className="pagination">
-        <div>
-          <img src={arrowLeft} alt="arrowLeft" />
+        <div
+          onClick={() => setCurrentSpeciesIndex((i) => Math.max(0, i - 1))}
+          disabled={currentSpeciesIndex === 0}
+        >
+          <img src={arrowLeft} alt="Voltar" />
         </div>
-        <p>01 / 04</p>
-        <div>
-          <img src={arrowRight} alt="arrowRight" />
+
+        <p>
+          PAGINA {currentSpeciesIndex + 1} / {categories.length}
+        </p>
+
+        <div
+          onClick={() =>
+            setCurrentSpeciesIndex((i) =>
+              Math.min(categories.length - 1, i + 1),
+            )
+          }
+          disabled={currentSpeciesIndex === categories.length - 1}
+        >
+          <img src={arrowRight} alt="Avançar" />
         </div>
       </div>
     </main>

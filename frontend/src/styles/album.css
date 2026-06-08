@@ -17,12 +17,43 @@
   border-top-right-radius: 30px;
 }
 
+.sticker span {
+  display: flex;
+  font-size: 20px;
+  font-weight: bold;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  width: fit-content;
+  margin-left: 25px;
+  padding: 5px 5px 0px 5px;
+}
+
 .sticker .card {
   background-color: var(--text);
   color: var(--secondary);
   padding: 60px 20px 20px 20px;
   margin-top: -50px;
   width: 204px;
+}
+
+.line {
+  display: flex;
+  justify-content: space-between;
+}
+
+.badge {
+  background-color: var(--secondary);
+  color: var(--text);
+  font-weight: bolder;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  bottom: -50px;
+  right: 15px;
 }
 
 .name_gender {

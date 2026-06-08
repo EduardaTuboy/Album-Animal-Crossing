@@ -5,6 +5,23 @@ import male from "../assets/male.png";
 function Sticker(props) {
   return (
     <div className="sticker">
+      <div className="line">
+        <span
+          style={{
+            backgroundColor:
+              props.amount > 0 ? "var(--text)" : "var(--secondary)",
+            color: props.amount > 0 ? "var(--secondary)" : "var(--text)",
+          }}
+        >
+          {props.number.toString().padStart(3, "0")}
+        </span>
+        <div
+          className="badge"
+          style={{ visibility: props.amount > 1 ? "visible" : "hidden" }}
+        >
+          {props.amount}
+        </div>
+      </div>
       <img src={props.image} alt="image URL" />
       <div
         className={"card chip"}
@@ -18,6 +35,7 @@ function Sticker(props) {
             <img
               src={props.gender === "female" ? female : male}
               alt={props.gender}
+              style={{ visibility: props.amount > 1 ? "visible" : "hidden" }}
             ></img>
           ) : null}
         </div>
