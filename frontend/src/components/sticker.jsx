@@ -31,13 +31,11 @@ function Sticker(props) {
       >
         <div className="name_gender">
           <h3>{props.name}</h3>
-          {props.amount > 0 ? (
-            <img
-              src={props.gender === "female" ? female : male}
-              alt={props.gender}
-              style={{ visibility: props.amount > 1 ? "visible" : "hidden" }}
-            ></img>
-          ) : null}
+          <img
+            src={props.gender === "female" ? female : male}
+            alt={props.gender}
+            style={{ visibility: props.amount > 1 ? "visible" : "hidden" }}
+          />
         </div>
         <p className="description">{props.description}</p>
       </div>
