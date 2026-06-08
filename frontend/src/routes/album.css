@@ -1,0 +1,47 @@
+.stickers {
+  display: flex;
+  gap: 20px;
+  margin: 50px 50px 0 50px;
+  justify-content: space-between;
+}
+
+.sticker img {
+  width: 204px;
+}
+
+.sticker .card {
+  background-color: var(--text);
+  color: var(--secondary);
+  padding: 60px 20px 20px 20px;
+  margin-top: -50px;
+  width: 204px;
+}
+
+.name_gender {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.name_gender img {
+  width: 40px;
+  border: 5px solid #ff0000; /* To remember to clip the image*/
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 50px;
+}
+
+.pagination img {
+  width: 40px;
+}
+
+.pagination p {
+  color: var(--secondary);
+  font-size: 32px;
+  font-weight: bold;
+}

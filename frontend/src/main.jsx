@@ -4,7 +4,6 @@ import { RouterProvider, createRouter } from "@tanstack/react-router";
 import "./index.css";
 import "./header.css";
 import "./footer.css";
-import App from "./App.jsx";
 
 // Isso importa as rotas geradas automaticamente pelo plugin do Vite
 import { routeTree } from "./routeTree.gen";
