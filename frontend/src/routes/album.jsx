@@ -1,10 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import "./album.css";
-import missingSticker from "../assets/missing-sticker.png";
-import female from "../assets/female.png";
-import male from "../assets/male.png";
+import "../styles/album.css";
 import arrowLeft from "../assets/arrow-left.png";
 import arrowRight from "../assets/arrow-right.png";
+import Sticker from "../components/sticker";
+import missingSticker from "../assets/missing-sticker.png";
 
 export const Route = createFileRoute("/album")({
   component: () => (
@@ -12,16 +11,12 @@ export const Route = createFileRoute("/album")({
       <h2 className="chip">Bird</h2>
 
       <div className="stickers">
-        <div className="sticker">
-          <img src={missingSticker} alt="Missing Sticker" />
-          <div className="card chip">
-            <div className="name_gender">
-              <h3>Piper</h3>
-              <img src={female} alt="female"></img>
-            </div>
-            <p className="description">The peppy bird</p>
-          </div>
-        </div>
+        <Sticker
+          name="Piper"
+          gender="female"
+          image={missingSticker}
+          description="The peppy bird"
+        />
       </div>
 
       <div className="pagination">
