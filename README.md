@@ -19,7 +19,7 @@ sudo docker exec -i pg-animal-crossing psql -U postgres -d album_animal_crossing
 
 ## Raridade das Figurinhas
 
-### Comum
+### Comum (50)
 
 - Bird
 - Bull
@@ -42,7 +42,7 @@ sudo docker exec -i pg-animal-crossing psql -U postgres -d album_animal_crossing
 - Squirrel
 - Wolf
 
-### Raro
+### Raro (20)
 
 - Alligator
 - Anteater
@@ -55,7 +55,7 @@ sudo docker exec -i pg-animal-crossing psql -U postgres -d album_animal_crossing
 - Monkey
 - Penguin
 
-### Legendário
+### Legendário (5)
 
 - Elephant
 - Frog

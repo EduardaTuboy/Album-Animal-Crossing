@@ -6,7 +6,6 @@ export const Route = createRootRoute({
   component: () => (
     <>
       <header>
-        {/* O Link substitui a tag <a> para não recarregar a página inteira */}
         <div id="logo">
           <img src={leafIcon} alt="Animal Crossing Logo" />
           <h1>Animal Crossing Album</h1>
@@ -21,7 +20,6 @@ export const Route = createRootRoute({
         </nav>
       </header>
 
-      {/* O Outlet é o "buraco" onde o conteúdo das outras páginas vai aparecer */}
       <Outlet />
 
       <footer>

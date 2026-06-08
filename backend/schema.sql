@@ -12,7 +12,9 @@ CREATE TABLE Stickers (
     gender VARCHAR(10),
     rarity VARCHAR(20),
     url TEXT,
-    total INTEGER
+    total INTEGER,
+    catchphrase VARCHAR(20),
+    hobbie VARCHAR(20)
 );
 
 CREATE TABLE Users (

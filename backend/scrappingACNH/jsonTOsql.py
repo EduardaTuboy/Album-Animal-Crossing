@@ -27,11 +27,15 @@ for item in dados_personagens:
     gender = item['gender'].lower()
     rarity = item['rarity'].lower()
     
-    # Mantém o total vindo do JSON (mesmo sendo 0 por padrão agora)
+    # Mantém o total vindo do JSON
     total = item['total']
+
+
+    catchphrase = item['catchphrase'].replace("'", "''")
+    hobbie = item['hobbie']
     
     # Monta a linha de valores do SQL
-    linha = f"({number}, '{name}', '{species}', '{personality}', '{gender}', '{rarity}', '{url}', {total})"
+    linha = f"({number}, '{name}', '{species}', '{personality}', '{gender}', '{rarity}', '{url}', {total}, '{catchphrase}', '{hobbie}')"
     linhas_insert.append(linha)
 
 # 3. Junta todas as linhas separando por vírgula e finaliza com ponto e vírgula

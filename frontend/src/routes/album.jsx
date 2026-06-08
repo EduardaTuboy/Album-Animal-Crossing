@@ -48,7 +48,7 @@ function Album() {
       </h2>
       <div className="stickers">
         {stickersInPage.map((sticker) => {
-          // Verifica se o usuário tem a figurinha (quantidade maior que 0)
+          // Verify if the user have the sticker
           const isOwned = sticker.amount > 0;
           return (
             <Sticker
@@ -59,7 +59,7 @@ function Album() {
               image={isOwned ? sticker.image_url : missingSticker}
               description={
                 isOwned
-                  ? `The ${sticker.personality} ${sticker.species}`
+                  ? `The ${sticker.hobbie} loving, ${sticker.personality} ${sticker.species}`
                   : "???"
               }
               amount={sticker.amount}
@@ -77,7 +77,7 @@ function Album() {
         </div>
 
         <p>
-          PAGINA {currentSpeciesIndex + 1} / {categories.length}
+          PAGE {currentSpeciesIndex + 1} / {categories.length}
         </p>
 
         <div

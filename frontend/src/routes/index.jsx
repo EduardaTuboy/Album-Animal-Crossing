@@ -9,7 +9,7 @@ export const Route = createFileRoute("/")({
 });
 
 function DashboardStats() {
-  // Estado para armazenar os dados vindos do backend
+  // Sticker status
   const [stats, setStats] = useState({
     unlocked: 0,
     repeating: 0,
@@ -17,12 +17,10 @@ function DashboardStats() {
     total: 0,
   });
 
-  // Simulando o email do usuário logado.
-  // Em um app real, isso viria do seu Contexto de Autenticação ou Token.
+  // Email test
   const currentUserEmail = "usuario@exemplo.com";
 
   useEffect(() => {
-    // Função para buscar os dados no backend
     const fetchStats = async () => {
       try {
         const response = await fetch(
@@ -40,7 +38,6 @@ function DashboardStats() {
     fetchStats();
   }, [currentUserEmail]);
 
-  // Recriando a lista dinamicamente com base no estado atualizado
   const statsList = [
     {
       id: "unlocked",
@@ -66,7 +63,7 @@ function DashboardStats() {
     <main>
       <h2 className="chip">Statistics</h2>
 
-      {/* Barra de progresso dinâmica */}
+      {/* Progress Bar */}
       <div className="chip" id="total">
         <div
           id="bar"

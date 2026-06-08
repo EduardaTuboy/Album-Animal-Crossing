@@ -46,9 +46,6 @@ app.get("/stats/:email", async (req, res) => {
 
   try {
     const result = await db.query(query, [userEmail]);
-
-    // Se o usuário não tiver nada, a query ainda retorna 0s,
-    // mas garantimos que a resposta seja enviada corretamente.
     res.json(result.rows[0]);
   } catch (err) {
     console.error("Erro ao buscar estatísticas:", err);
@@ -56,12 +53,10 @@ app.get("/stats/:email", async (req, res) => {
   }
 });
 
-// Rota para buscar o álbum completo cruzado com a coleção do usuário
 app.get("/album/:email", async (req, res) => {
   const userEmail = req.params.email;
 
-  // O LEFT JOIN garante que TODAS as figurinhas do catálogo apareçam,
-  // mesmo que o usuário tenha 0 delas na tabela Collect.
+  // Left join to show inclusive the missing stickers
   const query = `
     SELECT 
       s.number,
@@ -70,7 +65,9 @@ app.get("/album/:email", async (req, res) => {
       s.personality,
       s.gender,
       s.url AS image_url,
-      COALESCE(c.amount, 0)::int AS amount
+      COALESCE(c.amount, 0)::int AS amount,
+      s.catchphrase,
+      s.hobbie
     FROM Stickers s
     LEFT JOIN Collect c ON s.number = c.number AND c.email = $1
     ORDER BY s.number ASC;
