@@ -44,10 +44,8 @@ h2 {
 }
 
 #bar {
-  width: 70%;
   border-radius: 30px;
-  background-color: var(--primary);
-  color: var(--secondary);
+  color: var(--text);
   font-weight: bold;
   padding: 7.5px 15px 5px 15px;
   display: flex;

@@ -1,21 +1,86 @@
 import { createFileRoute } from "@tanstack/react-router";
-import unlocked from "../assets/unlocked.png";
-import repeating from "../assets/repeating.png";
-import missing from "../assets/missing.png";
-
-const statsList = [
-  { id: "unlocked", imgSrc: unlocked, title: "Unlocked", value: 302 },
-  { id: "repeating", imgSrc: repeating, title: "Repeating", value: 55 },
-  { id: "missing", imgSrc: missing, title: "Missing", value: 110 },
-];
+import { useEffect, useState } from "react";
+import unlockedImg from "../assets/unlocked.png";
+import repeatingImg from "../assets/repeating.png";
+import missingImg from "../assets/missing.png";
 
 export const Route = createFileRoute("/")({
-  component: () => (
+  component: DashboardStats,
+});
+
+function DashboardStats() {
+  // Estado para armazenar os dados vindos do backend
+  const [stats, setStats] = useState({
+    unlocked: 0,
+    repeating: 0,
+    missing: 0,
+    total: 0,
+  });
+
+  // Simulando o email do usuário logado.
+  // Em um app real, isso viria do seu Contexto de Autenticação ou Token.
+  const currentUserEmail = "usuario@exemplo.com";
+
+  useEffect(() => {
+    // Função para buscar os dados no backend
+    const fetchStats = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/stats/${currentUserEmail}`,
+        );
+        if (!response.ok) throw new Error("Falha ao buscar dados");
+
+        const data = await response.json();
+        setStats(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchStats();
+  }, [currentUserEmail]);
+
+  // Recriando a lista dinamicamente com base no estado atualizado
+  const statsList = [
+    {
+      id: "unlocked",
+      imgSrc: unlockedImg,
+      title: "Unlocked",
+      value: stats.unlocked,
+    },
+    {
+      id: "repeating",
+      imgSrc: repeatingImg,
+      title: "Repeating",
+      value: stats.repeating,
+    },
+    {
+      id: "missing",
+      imgSrc: missingImg,
+      title: "Missing",
+      value: stats.missing,
+    },
+  ];
+
+  return (
     <main>
       <h2 className="chip">Statistics</h2>
+
+      {/* Barra de progresso dinâmica */}
       <div className="chip" id="total">
-        <div id="bar">302 / 412</div>
+        <div
+          id="bar"
+          style={{
+            width: `${(stats.unlocked / stats.total) * 100}%`,
+            minWidth: "fit-content",
+            backgroundColor: `hsl(${(stats.unlocked / stats.total) * 144}, 39%, 66%)`,
+          }}
+        >
+          {stats.unlocked} / {stats.total}
+        </div>
       </div>
+
+      {/* Cards de estatísticas renderizados com os dados reais */}
       <div className="stats">
         {statsList.map((stat) => (
           <div key={stat.id}>
@@ -28,5 +93,5 @@ export const Route = createFileRoute("/")({
         ))}
       </div>
     </main>
-  ),
-});
+  );
+}

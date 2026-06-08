@@ -45,3 +45,13 @@ INSERT INTO Stickers (number, name, species, personality, gender, rarity, url, t
 (008,'Ankha','cat','snooty','female','rare','https://static.wikia.nocookie.net/animalcrossing/images/9/9a/NH-Ankha_poster.png/revision/latest?cb=20200410182618',15),
 (009,'Raymond','cat','smug','male','legendary','https://static.wikia.nocookie.net/animalcrossing/images/8/8e/NH-Raymond_poster.png/revision/latest?cb=20200522190120',5),
 (010,'Olivia','cat','snooty','female','rare','https://static.wikia.nocookie.net/animalcrossing/images/5/5a/NH-Olivia_poster.png/revision/latest?cb=20200410182136',15);
+
+INSERT INTO Users (email, username, password, role) VALUES
+('usuario@exemplo.com', 'usuario', 'senha123', 'user');
+
+INSERT INTO Collect (email, number, amount) VALUES
+('usuario@exemplo.com', 009, 1),
+('usuario@exemplo.com', 001, 2),
+('usuario@exemplo.com', 002, 1),
+('usuario@exemplo.com', 003, 1),
+('usuario@exemplo.com', 005, 3);
