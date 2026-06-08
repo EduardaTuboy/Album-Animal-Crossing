@@ -56,6 +56,35 @@ app.get("/stats/:email", async (req, res) => {
   }
 });
 
+// Rota para buscar o álbum completo cruzado com a coleção do usuário
+app.get("/album/:email", async (req, res) => {
+  const userEmail = req.params.email;
+
+  // O LEFT JOIN garante que TODAS as figurinhas do catálogo apareçam,
+  // mesmo que o usuário tenha 0 delas na tabela Collect.
+  const query = `
+    SELECT 
+      s.number,
+      s.name,
+      s.species,
+      s.personality,
+      s.gender,
+      s.url AS image_url,
+      COALESCE(c.amount, 0)::int AS amount
+    FROM Stickers s
+    LEFT JOIN Collect c ON s.number = c.number AND c.email = $1
+    ORDER BY s.number ASC;
+  `;
+
+  try {
+    const result = await db.query(query, [userEmail]);
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Erro ao carregar o álbum:", err);
+    res.status(500).json({ error: "Erro ao carregar o álbum de figurinhas." });
+  }
+});
+
 app.post("/add", async (req, res) => {
   const item = req.body.item;
   try {
