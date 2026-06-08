@@ -1,0 +1,17 @@
+.create {
+  background-color: var(--secondary);
+  color: var(--text);
+  font-size: 30px;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-weight: bold;
+}
+
+.create img {
+  width: 35px;
+  margin-top: -5px;
+}
