@@ -13,7 +13,7 @@ function Login() {
 
   return (
     <main>
-      <h2>Crie seu Personagem</h2>
+      <h2>Customize your apearence!</h2>
 
       <Villager
         size="250px"
