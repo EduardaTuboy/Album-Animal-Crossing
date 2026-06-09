@@ -14,9 +14,9 @@ export const Route = createRootRoute({
           <Link to="/">Home</Link>
           <Link to="/album">My Album</Link>
           <Link to="/collection">Collection</Link>
-          <div id="login">
+          <Link to="/login" id="login">
             <img src={loginIcon} alt="Login icon" />
-          </div>
+          </Link>
         </nav>
       </header>
 

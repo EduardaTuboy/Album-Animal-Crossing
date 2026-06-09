@@ -1,0 +1,40 @@
+.villager-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.villager-avatar {
+  position: relative;
+}
+
+.villager-avatar img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.villager-avatar img:nth-child(1) {
+  z-index: 1;
+}
+.villager-avatar img:nth-child(2) {
+  z-index: 2;
+}
+.villager-avatar img:nth-child(3) {
+  z-index: 3;
+}
+
+.villager-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
