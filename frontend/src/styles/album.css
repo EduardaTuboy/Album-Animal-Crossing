@@ -39,6 +39,7 @@
 .line {
   display: flex;
   justify-content: space-between;
+  position: relative;
 }
 
 .badge {
@@ -83,4 +84,56 @@
   color: var(--secondary);
   font-size: 32px;
   font-weight: bold;
+}
+
+.autograph {
+  font-size: 50px;
+  position: absolute;
+  bottom: -5px;
+  right: -45px;
+  z-index: 10;
+  transform: rotate(-15deg);
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.normal {
+  font-family: "Quicksand", sans-serif;
+  color: #a64d00;
+}
+
+.peppy {
+  font-family: "Chewy", cursive;
+  color: #ff1493;
+}
+
+.snooty {
+  font-family: "Playfair Display", serif;
+  color: #a930ff;
+}
+
+.sisterly {
+  font-family: "Caveat", cursive;
+  color: #d35400;
+}
+
+.lazy {
+  font-family: "Patrick Hand", cursive;
+  color: #025826;
+}
+
+.jock {
+  font-family: "Russo One", sans-serif;
+  color: #2980b9;
+  text-transform: uppercase; /* Atletas costumam "gritar" ou ser intensos */
+}
+
+.cranky {
+  font-family: "Vollkorn", serif;
+  color: #0d1926;
+}
+
+.smug {
+  font-family: "Lobster", cursive;
+  color: #04002c;
 }

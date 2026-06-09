@@ -16,6 +16,12 @@ function Sticker(props) {
           {props.number.toString().padStart(3, "0")}
         </span>
         <div
+          className={`${props.personality} autograph`}
+          style={{ visibility: props.autograph ? "visible" : "hidden" }}
+        >
+          {props.catchphrase}
+        </div>
+        <div
           className="badge"
           style={{ visibility: props.amount > 1 ? "visible" : "hidden" }}
         >

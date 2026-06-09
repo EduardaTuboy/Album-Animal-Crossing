@@ -63,6 +63,9 @@ function Album() {
                   : "???"
               }
               amount={sticker.amount}
+              catchphrase={sticker.catchphrase}
+              personality={sticker.personality}
+              autograph={sticker.autograph} // Update Collect to support this boolean value later
             />
           );
         })}
