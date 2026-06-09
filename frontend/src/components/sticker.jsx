@@ -40,7 +40,7 @@ function Sticker(props) {
           <img
             src={props.gender === "female" ? female : male}
             alt={props.gender}
-            style={{ visibility: props.amount > 1 ? "visible" : "hidden" }}
+            style={{ visibility: props.amount > 0 ? "visible" : "hidden" }}
           />
         </div>
         <p className="description">{props.description}</p>

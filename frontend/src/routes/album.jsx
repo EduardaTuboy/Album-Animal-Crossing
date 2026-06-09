@@ -59,7 +59,7 @@ function Album() {
               image={isOwned ? sticker.image_url : missingSticker}
               description={
                 isOwned
-                  ? `The ${sticker.hobbie} loving, ${sticker.personality} ${sticker.species}`
+                  ? `The ${sticker.hobbie.toLowerCase()} loving, ${sticker.personality} ${sticker.species}`
                   : "???"
               }
               amount={sticker.amount}
