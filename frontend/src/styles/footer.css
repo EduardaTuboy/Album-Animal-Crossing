@@ -18,3 +18,9 @@ footer a {
   color: var(--text);
   text-decoration: none;
 }
+
+@media (width < 1000px) {
+  footer {
+    padding: 50px 20px;
+  }
+}
