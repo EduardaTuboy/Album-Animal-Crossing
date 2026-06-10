@@ -22,9 +22,8 @@ function AttributeControl({ label, currentIndex, totalItems, setIndex }) {
   );
 }
 
-// NOVO: Sub-componente que gerencia o blend mode e a máscara de forma genérica
 function AvatarLayer({ src, alt, color, blendMode }) {
-  if (!color) return <img src={src} alt={alt} />; // Retorna imagem normal para a pele
+  if (!color) return <img src={src} alt={alt} />;
 
   return (
     <div className="blend-container">
@@ -56,18 +55,17 @@ export default function Villager({
   setHairColor,
   setEyesColor,
 }) {
-  // A MÁGICA: Centraliza as propriedades de cada parte do boneco em uma estrutura de dados
   const avatarLayers = [
     {
       id: "skin",
-      label: "Pele",
+      label: "Skin",
       assets: skins,
       index: skinIndex,
       setIndex: setSkinIndex,
     },
     {
       id: "eyes",
-      label: "Olhos",
+      label: "Eyes",
       assets: eyes,
       index: eyesIndex,
       setIndex: setEyesIndex,
@@ -77,7 +75,7 @@ export default function Villager({
     },
     {
       id: "hair",
-      label: "Cabelo",
+      label: "Hair",
       assets: hairs,
       index: hairIndex,
       setIndex: setHairIndex,
@@ -89,7 +87,6 @@ export default function Villager({
 
   return (
     <div className="villager-container">
-      {/* Renderização das camadas do avatar reduzida para 1 bloco dinâmico */}
       <div className="villager-avatar" style={{ width: size, height: size }}>
         {avatarLayers.map((layer) => (
           <AvatarLayer
@@ -102,7 +99,6 @@ export default function Villager({
         ))}
       </div>
 
-      {/* Interface de customização dinâmica */}
       {editable && (
         <div className="villager-controls">
           {avatarLayers.map((layer) => (
