@@ -18,7 +18,7 @@ function Login() {
       <h2>Customize your apearence!</h2>
 
       <Villager
-        size="250px"
+        size="300px"
         skinIndex={skin}
         eyesIndex={eyes}
         hairIndex={hair}

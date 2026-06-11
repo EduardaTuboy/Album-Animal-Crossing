@@ -3,6 +3,9 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  width: fit-content;
+  height: fit-content;
+  font-size: 20px;
 }
 
 .villager-avatar {
@@ -33,10 +36,35 @@
   flex-direction: column;
   gap: 10px;
 }
+
 .control-group {
   display: flex;
   align-items: center;
-  gap: 15px;
+}
+
+.control-group button {
+  padding: 5px;
+  border: none;
+  background-color: var(--secondary);
+  color: var(--text);
+}
+
+.control-group span {
+  background-color: var(--primary);
+  padding: 5px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.left {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.right {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .blend-container {
@@ -68,4 +96,75 @@
   -webkit-mask-size: 100% 100%;
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
+}
+
+.hsl-picker-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 250px;
+}
+
+/* Reset básico dos sliders */
+.hsl-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 4px;
+  outline: none;
+}
+
+/* Gradiente estático para o Hue (roda de cores completo) */
+.slider-hue {
+  background: linear-gradient(
+    to right,
+    #ff0000,
+    #ffff00,
+    #00ff00,
+    #00ffff,
+    #0000ff,
+    #ff00ff,
+    #ff0000
+  );
+}
+
+/* Saturação e Lightness recebem o gradiente dinâmico via style inline do React */
+.slider-saturation,
+.slider-lightness {
+  background-size: cover;
+}
+
+/* --- ESTILIZAÇÃO DA BOLINHA (THUMB) --- */
+
+/* Para Chrome, Safari, Edge e Opera */
+.hsl-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--current-color);
+  cursor: pointer;
+}
+
+.hsl-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Para Firefox */
+.hsl-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--current-color);
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.hsl-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
 }

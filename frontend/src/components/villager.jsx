@@ -9,13 +9,19 @@ function AttributeControl({ label, currentIndex, totalItems, setIndex }) {
 
   return (
     <div className="control-group">
-      <button onClick={() => setIndex((prev) => prevItem(prev, totalItems))}>
+      <button
+        className="left"
+        onClick={() => setIndex((prev) => prevItem(prev, totalItems))}
+      >
         ◀
       </button>
       <span>
         {label} {currentIndex + 1}
       </span>
-      <button onClick={() => setIndex((prev) => nextItem(prev, totalItems))}>
+      <button
+        className="right"
+        onClick={() => setIndex((prev) => nextItem(prev, totalItems))}
+      >
         ▶
       </button>
     </div>
@@ -50,8 +56,8 @@ export default function Villager({
   setSkinIndex,
   setEyesIndex,
   setHairIndex,
-  hairColor = "#ff0000",
-  eyesColor = "#0000ff",
+  hairColor = "#442200",
+  eyesColor = "#442200",
   setHairColor,
   setEyesColor,
 }) {
@@ -109,14 +115,120 @@ export default function Villager({
                 totalItems={layer.assets.length}
                 setIndex={layer.setIndex}
               />
-              {layer.color && (
-                <input
-                  type="color"
-                  value={layer.color}
-                  onChange={(e) => layer.setColor(e.target.value)}
-                  className="color-picker"
-                />
-              )}
+              {layer.color &&
+                (() => {
+                  // Funções auxiliares de conversão (coloque fora do componente principal se preferir)
+                  const hexToHsl = (hex) => {
+                    let r = parseInt(hex.slice(1, 3), 16) / 255;
+                    let g = parseInt(hex.slice(3, 5), 16) / 255;
+                    let b = parseInt(hex.slice(5, 7), 16) / 255;
+                    let max = Math.max(r, g, b),
+                      min = Math.min(r, g, b);
+                    let h,
+                      s,
+                      l = (max + min) / 2;
+
+                    if (max === min) {
+                      h = s = 0;
+                    } else {
+                      let d = max - min;
+                      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                      switch (max) {
+                        case r:
+                          h = (g - b) / d + (g < b ? 6 : 0);
+                          break;
+                        case g:
+                          h = (b - r) / d + 2;
+                          break;
+                        case b:
+                          h = (r - g) / d + 4;
+                          break;
+                      }
+                      h /= 6;
+                    }
+                    return {
+                      h: Math.round(h * 360),
+                      s: Math.round(s * 100),
+                      l: Math.round(l * 100),
+                    };
+                  };
+
+                  const hslToHex = (h, s, l) => {
+                    l /= 100;
+                    const a = (s * Math.min(l, 1 - l)) / 100;
+                    const f = (n) => {
+                      const k = (n + h / 30) % 12;
+                      const color =
+                        l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                      return Math.round(255 * color)
+                        .toString(16)
+                        .padStart(2, "0");
+                    };
+                    return `#${f(0)}${f(8)}${f(4)}`;
+                  };
+
+                  const { h, s, l } = hexToHsl(layer.color);
+
+                  const updateHsl = (newH, newS, newL) => {
+                    const hex = hslToHex(newH, newS, newL);
+                    layer.setColor(hex);
+                  };
+
+                  return (
+                    <div
+                      className="hsl-picker-container"
+                      style={{ "--current-color": layer.color }}
+                    >
+                      {/* Hue */}
+                      <div className="slider-group">
+                        <input
+                          type="range"
+                          min="0"
+                          max="360"
+                          value={h}
+                          onChange={(e) =>
+                            updateHsl(Number(e.target.value), s, l)
+                          }
+                          className="hsl-slider slider-hue"
+                        />
+                      </div>
+
+                      {/* Saturation */}
+                      <div className="slider-group">
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={s}
+                          onChange={(e) =>
+                            updateHsl(h, Number(e.target.value), l)
+                          }
+                          className="hsl-slider slider-saturation"
+                          style={{
+                            backgroundImage: `linear-gradient(to right, hsl(${h}, 0%, ${l}%), hsl(${h}, 100%, ${l}%))`,
+                          }}
+                        />
+                      </div>
+
+                      {/* Lightness */}
+                      <div className="slider-group">
+                        <input
+                          type="range"
+                          min="0"
+                          max="100"
+                          value={l}
+                          onChange={(e) =>
+                            updateHsl(h, s, Number(e.target.value))
+                          }
+                          className="hsl-slider slider-lightness"
+                          style={{
+                            backgroundImage: `linear-gradient(to right, hsl(${h}, ${s}%, 0%), hsl(${h}, ${s}%, 50%), hsl(${h}, ${s}%, 100%))`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })()}
             </div>
           ))}
         </div>
