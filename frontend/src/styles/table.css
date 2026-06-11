@@ -1,0 +1,56 @@
+.table {
+  margin-top: 30px;
+}
+
+.table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table h3 {
+  display: flex;
+  background-color: var(--secondary);
+  color: var(--text);
+  border-radius: 10px;
+  justify-content: center;
+  font-size: 25px;
+  padding: 15px;
+  margin: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.table thead tr {
+  background-color: var(--primary);
+  color: var(--tertiary);
+  font-size: 20px;
+}
+
+.table thead th {
+  padding: 8px;
+  text-align: left;
+}
+
+.table tbody td {
+  padding: 8px;
+  background-color: var(--primary-light);
+  font-size: 18px;
+}
+
+.table tbody tr:nth-child(even) td {
+  background-color: var(--primary);
+}
+
+.inline-buttons button {
+  margin: 5px;
+  background-color: var(--secondary);
+  border: 0;
+  padding: 5px;
+  border-radius: 5px;
+  width: 30px;
+  height: 30px;
+}
+
+.inline-buttons img {
+  width: 20px;
+}

@@ -7,7 +7,9 @@
 
 :root {
   --primary: #86caa1;
+  --primary-light: #b5eecc;
   --secondary: #338f66;
+  --tertiary: #0e3e29;
   --text: #ffffff;
   --highligh: #ffeea0;
 }

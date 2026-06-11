@@ -1,0 +1,91 @@
+.modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #165f3e96;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  font-size: 20px;
+}
+
+.modal-content {
+  background: var(--primary);
+  padding: 20px;
+  border-radius: 8px;
+  min-width: 320px;
+  max-height: 90vh;
+  overflow-y: auto;
+  width: 50vw;
+}
+
+.modal-container h3 {
+  display: flex;
+  background-color: var(--secondary);
+  color: var(--text);
+  padding: 5px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  justify-content: center;
+}
+
+.modal-container form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px 20px;
+}
+
+.modal-container label {
+  display: block;
+  background-color: var(--secondary);
+  width: 150px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  color: var(--text);
+  padding: 5px;
+  margin-left: 5px;
+  font-weight: bold;
+}
+
+.modal-container input,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 10px;
+  background-color: var(--text);
+  font-size: 18px;
+}
+
+.input-label {
+  margin: 10px;
+}
+
+.modal-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 15px;
+}
+
+.modal-container button {
+  background-color: var(--secondary);
+  color: var(--text);
+  font-size: 20px;
+  border: none;
+  border-radius: 30px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  font-weight: bold;
+}
+
+#cancel {
+  background-color: var(--text);
+  color: var(--secondary);
+}
