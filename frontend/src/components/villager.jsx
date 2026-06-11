@@ -117,7 +117,7 @@ export default function Villager({
               />
               {layer.color &&
                 (() => {
-                  // Funções auxiliares de conversão (coloque fora do componente principal se preferir)
+                  // Funções auxiliares de conversão
                   const hexToHsl = (hex) => {
                     let r = parseInt(hex.slice(1, 3), 16) / 255;
                     let g = parseInt(hex.slice(3, 5), 16) / 255;

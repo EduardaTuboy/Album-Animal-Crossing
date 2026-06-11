@@ -1,20 +1,9 @@
 import "dotenv/config";
 import express from "express";
 import bodyParser from "body-parser";
-import pg from "pg";
 import cors from "cors";
 
-const app = express();
-const port = 5000;
-
-const db = new pg.Client({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT),
-});
-db.connect();
+const db = require("./config/db.js");
 
 // Middlewares
 app.use(cors());
@@ -83,6 +72,7 @@ app.get("/album/:email", async (req, res) => {
   }
 });
 
+// Essa requisição foi usada de exemplo para ser separada em Model, Controller e View
 app.get("/collection", async (req, res) => {
   const query = `
     SELECT *

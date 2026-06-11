@@ -152,8 +152,6 @@
 .hsl-slider::-webkit-slider-thumb:hover {
   transform: scale(1.2);
 }
-
-/* Para Firefox */
 .hsl-slider::-moz-range-thumb {
   width: 18px;
   height: 18px;

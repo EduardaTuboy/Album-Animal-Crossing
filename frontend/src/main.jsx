@@ -8,12 +8,12 @@ import "./styles/footer.css";
 import { routeTree } from "./routeTree.gen";
 
 const router = createRouter({ routeTree });
-const queryClient = new QueryClient();
+// const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
+    {/* <QueryClientProvider client={queryClient}> */}
+    <RouterProvider router={router} />
+    {/* </QueryClientProvider> */}
   </StrictMode>,
 );
