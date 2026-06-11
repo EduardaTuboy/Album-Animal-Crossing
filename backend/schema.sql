@@ -14,6 +14,7 @@ CREATE TABLE Stickers (
     url TEXT,
     total INTEGER,
     catchphrase VARCHAR(20),
+    birthday DATE,
     hobbie VARCHAR(20)
 );
 
@@ -29,6 +30,7 @@ CREATE TABLE Collect (
     number INTEGER,
     amount INTEGER,
     timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    autograph BOOLEAN DEFAULT false,
     PRIMARY KEY (email,number),
     FOREIGN KEY (email) REFERENCES Users(email),
     FOREIGN KEY (number) REFERENCES Stickers(number)

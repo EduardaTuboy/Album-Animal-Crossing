@@ -13,6 +13,8 @@ npm run dev
 
 ### Para atualizar o backend
 
+sudo docker exec -i pg-animal-crossing psql -U postgres -d album_animal_crossing < schema.sql
+
 sudo docker exec -i pg-animal-crossing psql -U postgres -d album_animal_crossing < load_stickers.sql
 
 sudo docker exec -i pg-animal-crossing psql -U postgres -d album_animal_crossing < load_users.sql
@@ -62,3 +64,24 @@ sudo docker exec -i pg-animal-crossing psql -U postgres -d album_animal_crossing
 - Gorilla
 - Rhino
 - Tiger
+
+## Villager Component Architecture
+
+The `Villager` component is designed using a **Data-Driven Dynamic Layering** approach. Instead of hardcoding visual elements, it interprets a configuration array to render character layers and their respective UI controls dynamically.
+
+### How It Works
+
+1. **Layer Definition (`avatarLayers`)**:
+   Inside the component, there is a central array of objects containing the configuration for each customizable part of the character (e.g., Skin, Eyes, Hair).
+   ```javascript
+   {
+     id: "hair",              // Unique identifier
+     label: "Hair",           // UI display name
+     assets: hairs,           // Array of imported image assets
+     index: hairIndex,        // Current active index state
+     setIndex: setHairIndex,  // State setter for changing items
+     color: hairColor,        // [Optional] Hex color code state
+     setColor: setHairColor,  // [Optional] State setter for color changes
+     blendMode: "screen"      // [Optional] CSS mix-blend-mode ("color", "screen", "multiply")
+   }
+   ```
