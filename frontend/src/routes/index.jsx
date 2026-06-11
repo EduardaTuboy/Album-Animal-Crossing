@@ -1,60 +1,38 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import unlockedImg from "../assets/unlocked.png";
-import repeatingImg from "../assets/repeating.png";
-import missingImg from "../assets/missing.png";
+import { createFileRoute } from '@tanstack/react-router';
+import unlockedImg from '../assets/unlocked.png';
+import repeatingImg from '../assets/repeating.png';
+import missingImg from '../assets/missing.png';
+import { useStats } from '../api/stickersQueries.js';
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute('/')({
   component: DashboardStats,
 });
 
 function DashboardStats() {
-  // Sticker status
-  const [stats, setStats] = useState({
-    unlocked: 0,
-    repeating: 0,
-    missing: 0,
-    total: 0,
-  });
+  const currentUserEmail = 'usuario@exemplo.com';
+  const { data: stats = { unlocked: 0, repeating: 0, missing: 0, total: 0 } } =
+    useStats(currentUserEmail);
 
-  // Email test
-  const currentUserEmail = "usuario@exemplo.com";
-
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5000/stats/${currentUserEmail}`,
-        );
-        if (!response.ok) throw new Error("Falha ao buscar dados");
-
-        const data = await response.json();
-        setStats(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchStats();
-  }, [currentUserEmail]);
+  const total = stats.total || 1;
+  const percentage = Math.round((stats.unlocked / total) * 100);
 
   const statsList = [
     {
-      id: "unlocked",
+      id: 'unlocked',
       imgSrc: unlockedImg,
-      title: "Unlocked",
+      title: 'Unlocked',
       value: stats.unlocked,
     },
     {
-      id: "repeating",
+      id: 'repeating',
       imgSrc: repeatingImg,
-      title: "Repeating",
+      title: 'Repeating',
       value: stats.repeating,
     },
     {
-      id: "missing",
+      id: 'missing',
       imgSrc: missingImg,
-      title: "Missing",
+      title: 'Missing',
       value: stats.missing,
     },
   ];
@@ -63,21 +41,19 @@ function DashboardStats() {
     <main>
       <h2 className="chip">Statistics</h2>
 
-      {/* Progress Bar */}
       <div className="chip" id="total">
         <div
           id="bar"
           style={{
-            width: `${(stats.unlocked / stats.total) * 100}%`,
-            minWidth: "fit-content",
-            backgroundColor: `hsl(${(stats.unlocked / stats.total) * 144}, 39%, 66%)`,
+            width: `${percentage}%`,
+            minWidth: 'fit-content',
+            backgroundColor: `hsl(${percentage * 1.44}, 39%, 66%)`,
           }}
         >
           {stats.unlocked} / {stats.total}
         </div>
       </div>
 
-      {/* Cards de estatísticas renderizados com os dados reais */}
       <div className="stats">
         {statsList.map((stat) => (
           <div key={stat.id}>
