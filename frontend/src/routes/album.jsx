@@ -15,28 +15,30 @@ export const Route = createFileRoute("/album")({
 function Album() {
   const [currentSpeciesIndex, setCurrentSpeciesIndex] = useState(0);
   const currentUserEmail = "usuario@exemplo.com";
-  const { data: stickers = [] } = useAlbum(currentUserEmail);
 
-  // 1. Adicionamos a propriedade "status" ao estado inicial
+  const {
+    data: stickers = [],
+    isLoading,
+    isError,
+    error,
+  } = useAlbum(currentUserEmail);
+
   const [filters, setFilters] = useState({
     species: "",
     hobbie: "",
     personality: "",
     gender: "",
-    status: "", // <-- NOVO
+    status: "",
   });
 
-  // 2. Aplicamos a regra matemática no filtro da lista
   const filteredStickers = useMemo(() => {
     return stickers.filter((s) => {
-      // Filtros exatos
       if (filters.species && s.species !== filters.species) return false;
       if (filters.hobbie && s.hobbie !== filters.hobbie) return false;
       if (filters.personality && s.personality !== filters.personality)
         return false;
       if (filters.gender && s.gender !== filters.gender) return false;
 
-      // Filtro de status: Converte os valores literais em checagem do 'amount'
       if (filters.status) {
         const amount = s.amount || 0;
         if (filters.status === "missing" && amount > 0) return false;
@@ -48,10 +50,10 @@ function Album() {
     });
   }, [stickers, filters]);
 
-  // Recalculamos as páginas com base no array filtrado
   const categories = Array.from(
     new Set(filteredStickers.map((s) => s.species)),
   ).sort();
+
   const activeIndex = Math.min(
     currentSpeciesIndex,
     Math.max(0, categories.length - 1),
@@ -64,7 +66,6 @@ function Album() {
 
   return (
     <main>
-      {/* 3. Inserimos o componente e garantimos que o Limpar Filtros reseta o status também */}
       <StickersFilter
         data={stickers}
         isAlbum={true}
@@ -85,72 +86,101 @@ function Album() {
         }}
       />
 
-      {categories.length > 0 ? (
-        <>
-          <h2 className="chip">{currentPageCategory?.toUpperCase()}</h2>
-          <div className="stickers">
-            {stickersInPage.map((sticker) => {
-              const isOwned = sticker.amount > 0;
-              return (
-                <Sticker
-                  key={sticker.number}
-                  email={currentUserEmail}
-                  number={sticker.number}
-                  name={isOwned ? sticker.name : "???"}
-                  gender={isOwned ? sticker.gender : "???"}
-                  image={isOwned ? sticker.image_url : missingSticker}
-                  description={
-                    isOwned
-                      ? `The ${sticker.hobbie.toLowerCase()} loving, ${sticker.personality} ${sticker.species}`
-                      : "???"
-                  }
-                  amount={sticker.amount}
-                  catchphrase={sticker.catchphrase}
-                  personality={sticker.personality}
-                  autograph={sticker.autograph}
-                />
-              );
-            })}
-          </div>
-
-          <div className="pagination">
-            <div
-              onClick={() => setCurrentSpeciesIndex((i) => Math.max(0, i - 1))}
-              style={{
-                cursor: activeIndex === 0 ? "not-allowed" : "pointer",
-                opacity: activeIndex === 0 ? 0.5 : 1,
-              }}
-            >
-              <img src={arrowLeft} alt="Voltar" />
-            </div>
-
-            <p>
-              PAGE {activeIndex + 1} / {categories.length}
-            </p>
-
-            <div
-              onClick={() =>
-                setCurrentSpeciesIndex((i) =>
-                  Math.min(categories.length - 1, i + 1),
-                )
-              }
-              style={{
-                cursor:
-                  activeIndex === categories.length - 1
-                    ? "not-allowed"
-                    : "pointer",
-                opacity: activeIndex === categories.length - 1 ? 0.5 : 1,
-              }}
-            >
-              <img src={arrowRight} alt="Avançar" />
-            </div>
-          </div>
-        </>
-      ) : (
-        <div style={{ textAlign: "center", marginTop: "50px" }}>
-          <h2>No stickers found with these filters.</h2>
+      {/* Loading */}
+      {isLoading && (
+        <div
+          style={{
+            textAlign: "center",
+            margin: "80px auto",
+            color: "var(--text)",
+          }}
+        >
+          <div className="warning">Loading your stickers...</div>
         </div>
       )}
+
+      {/* Error */}
+      {isError && (
+        <div className="warning">
+          <span>
+            There was a communication error with Dodo Airlines. Check your local
+            connection!
+          </span>
+        </div>
+      )}
+
+      {/* Stickers found */}
+      {!isLoading &&
+        !isError &&
+        (categories.length > 0 ? (
+          <>
+            <h2 className="chip">{currentPageCategory?.toUpperCase()}</h2>
+            <div className="stickers">
+              {stickersInPage.map((sticker) => {
+                const isOwned = sticker.amount > 0;
+                return (
+                  <Sticker
+                    key={sticker.number}
+                    email={currentUserEmail}
+                    number={sticker.number}
+                    name={isOwned ? sticker.name : "???"}
+                    gender={isOwned ? sticker.gender : "???"}
+                    image={isOwned ? sticker.image_url : missingSticker}
+                    description={
+                      isOwned
+                        ? `The ${sticker.hobbie.toLowerCase()} loving, ${sticker.personality} ${sticker.species}`
+                        : "???"
+                    }
+                    amount={sticker.amount}
+                    catchphrase={sticker.catchphrase}
+                    personality={sticker.personality}
+                    autograph={sticker.autograph}
+                  />
+                );
+              })}
+            </div>
+
+            <div className="pagination">
+              <div
+                onClick={() =>
+                  setCurrentSpeciesIndex((i) => Math.max(0, i - 1))
+                }
+                style={{
+                  cursor: activeIndex === 0 ? "not-allowed" : "pointer",
+                  opacity: activeIndex === 0 ? 0.5 : 1,
+                }}
+              >
+                <img src={arrowLeft} alt="Voltar" />
+              </div>
+
+              <p>
+                PAGE {activeIndex + 1} / {categories.length}
+              </p>
+
+              <div
+                onClick={() =>
+                  setCurrentSpeciesIndex((i) =>
+                    Math.min(categories.length - 1, i + 1),
+                  )
+                }
+                style={{
+                  cursor:
+                    activeIndex === categories.length - 1
+                      ? "not-allowed"
+                      : "pointer",
+                  opacity: activeIndex === categories.length - 1 ? 0.5 : 1,
+                }}
+              >
+                <img src={arrowRight} alt="Avançar" />
+              </div>
+            </div>
+          </>
+        ) : (
+          // No stickers found
+          <div className="warning">
+            <h2>No stickers found!</h2>
+          </div>
+        ))}
     </main>
   );
 }

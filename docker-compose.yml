@@ -1,44 +1,42 @@
 version: "3.8"
 
 services:
-  # 1. O NOSSO BANCO DE DADOS (PostgreSQL)
   db:
     image: postgres:15-alpine
     container_name: animal_crossing_db
     environment:
-      POSTGRES_USER: postgres # Substitua pelo utilizador que usa
-      POSTGRES_PASSWORD: admin # Substitua pela sua password
-      POSTGRES_DB: animal_crossing # Nome da sua base de dados
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
     ports:
-      - "5444:5432" # Expõe a porta 5433 para o seu computador
+      - "${DB_EXTERNAL_PORT}:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data # Isto garante que os dados não se apagam se desligar o Docker!
+      - pgdata:/var/lib/postgresql/data
+      - ./backend/db:/docker-entrypoint-initdb.d
 
-  # 2. O SEU BACKEND
   backend:
-    build: ./backend # Diz ao Docker para ler o Dockerfile da pasta backend
+    build: ./backend
     container_name: animal_crossing_backend
     ports:
-      - "5000:5000" # Liga a porta 5000 do Docker à 5000 do seu PC
+      - "5000:5000"
     environment:
-      # Variáveis de ambiente para o seu backend saber onde está o banco de dados
-      - DB_HOST=db # IMPORTANTE: Dentro do Docker, o host já não é 'localhost', é 'db' (o nome do serviço acima)!
-      - DB_USER=postgres
-      - DB_PASSWORD=admin
-      - DB_NAME=animal_crossing
-      - DB_PORT=5432
+      - DB_HOST=db
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
     depends_on:
-      - db # O backend só liga depois do banco de dados estar pronto
-
-  # 3. O SEU FRONTEND
+      - db
   frontend:
-    build: ./frontend # Lê o Dockerfile da pasta frontend
+    build: ./frontend
     container_name: animal_crossing_frontend
     ports:
-      - "5173:5173" # Liga o Vite à sua porta 5173
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
     depends_on:
-      - backend # O frontend só liga depois do backend
+      - backend
 
-# Declaração do volume persistente para a base de dados
 volumes:
   pgdata:

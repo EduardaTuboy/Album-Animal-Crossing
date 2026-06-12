@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import female from "../assets/female.png";
 import male from "../assets/male.png";
 import {
@@ -12,7 +12,10 @@ function Sticker(props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [draftAmount, setDraftAmount] = useState(props.amount || 0);
 
-  // Trazemos as TRÊS armas do nosso arsenal
+  useEffect(() => {
+    setDraftAmount(props.amount || 0);
+  }, [props.amount]);
+
   const { mutate: addSticker, isPending: isAdding } = useAddSticker();
   const { mutate: updateSticker, isPending: isUpdating } = useUpdateSticker();
   const { mutate: deleteSticker, isPending: isDeleting } = useDeleteSticker();
@@ -34,19 +37,18 @@ function Sticker(props) {
       amount: draftAmount,
     };
 
-    // CENÁRIO 1: Adicionar novo
+    // Add new sticker, it go unlocked
     if (currentAmount === 0 && draftAmount > 0) {
       addSticker(payload, { onSuccess: () => setIsExpanded(false) });
     }
-    // CENÁRIO 2: Deletar (Reduziu para 0)
+    // Delete the only sticker, it go missing
     else if (currentAmount > 0 && draftAmount === 0) {
-      // O delete só precisa do email e do number
       deleteSticker(
         { email: props.email, number: props.number },
         { onSuccess: () => setIsExpanded(false) },
       );
     }
-    // CENÁRIO 3: Atualizar a quantidade
+    // Update amount
     else if (
       currentAmount > 0 &&
       draftAmount > 0 &&

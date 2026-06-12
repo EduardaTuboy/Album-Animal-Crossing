@@ -16,7 +16,6 @@ export function StickersFilter({
   onClearFilters,
   isAlbum,
 }) {
-  // Extrai as opções únicas dinamicamente
   const speciesOptions = useMemo(
     () =>
       Array.from(new Set(data.map((i) => i.species)))
@@ -46,7 +45,6 @@ export function StickersFilter({
     [data],
   );
 
-  // Verifica se há algum filtro ativo para mostrar o botão "Limpar"
   const hasActiveFilters = Object.values(filters).some((val) => val !== "");
 
   return (

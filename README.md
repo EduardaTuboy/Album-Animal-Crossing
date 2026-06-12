@@ -1,10 +1,5 @@
 # Album-Animal-Crossing
 
-## Frontend
-
-cd para a pasta /frontend
-npm run dev
-
 # Docker
 
 sudo docker compose up --build (first run)
@@ -12,20 +7,6 @@ sudo docker compose ps (conferir que está rodando)
 sudo docker compose up
 sudo docker compose down
 sudo docker compose down -v (reset db)
-
-## Backend
-
-cd para a pasta /backend
-sudo docker start pg-animal-crossing (o Postgress está no Docker)
-npm run dev
-
-### Para atualizar o backend
-
-sudo docker exec -i pg-animal-crossing psql -U postgres -d album_animal_crossing < backend/db/schema.sql
-
-sudo docker exec -i pg-animal-crossing psql -U postgres -d album_animal_crossing < backend/db/load_stickers.sql
-
-sudo docker exec -i pg-animal-crossing psql -U postgres -d album_animal_crossing < backend/db/load_users.sql
 
 ## Raridade das Figurinhas
 

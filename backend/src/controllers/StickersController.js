@@ -78,8 +78,14 @@ export const deleteSticker = async (req, res) => {
 export const addToCollection = async (req, res) => {
   const { email, number, amount } = req.body;
   try {
+    const existing = await Stickers.getCollectItem(email, number);
+    if (existing) {
+      return res
+        .status(409)
+        .json({ error: "Item já existe na coleção. Use collect/update." });
+    }
     const item = await Stickers.addStickerToCollect(email, number, amount);
-    res.json(item);
+    res.status(201).json(item);
   } catch (err) {
     console.error("Erro ao adicionar à coleção:", err);
     res.status(500).json({ error: "Erro ao adicionar à coleção" });
@@ -89,6 +95,12 @@ export const addToCollection = async (req, res) => {
 export const updateInCollection = async (req, res) => {
   const { email, number, amount } = req.body;
   try {
+    const existing = await Stickers.getCollectItem(email, number);
+    if (!existing) {
+      return res
+        .status(404)
+        .json({ error: "Item não encontrado. Use collect/add para criar." });
+    }
     const item = await Stickers.updateStickerInCollect(email, number, amount);
     res.json(item);
   } catch (err) {
@@ -98,7 +110,7 @@ export const updateInCollection = async (req, res) => {
 };
 
 export const removeFromCollection = async (req, res) => {
-  const { email, number } = req.params; // Lemos os dados pela URL
+  const { email, number } = req.params;
   try {
     await Stickers.removeStickerFromCollect(email, number);
     res.json({ message: "Removido com sucesso" });

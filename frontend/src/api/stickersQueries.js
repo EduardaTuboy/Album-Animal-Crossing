@@ -12,7 +12,7 @@ export const useStats = (email) =>
     queryFn: () => stickersApi.getStats(email),
     enabled: !!email,
     staleTime: 1000 * 60 * 2,
-    gcTime: 1000 * 60 * 10, // Na v5, cacheTime passou a chamar-se gcTime
+    gcTime: 1000 * 60 * 10,
   });
 
 export const useAlbum = (email) =>
@@ -30,14 +30,82 @@ export const useCollection = () =>
     staleTime: 1000 * 60 * 2,
   });
 
-// E altere as funções de mutação:
+export const useCreateCatalogSticker = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data) => stickersApi.addSticker(data),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["collection"] });
+    },
+  });
+};
+
+export const useUpdateCatalogSticker = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ number, data }) => stickersApi.updateSticker(number, data),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["collection"] });
+      queryClient.invalidateQueries({ queryKey: ["album"] });
+    },
+  });
+};
+
+export const useDeleteCatalogSticker = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (number) => stickersApi.deleteSticker(number),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["collection"] });
+      queryClient.invalidateQueries({ queryKey: ["album"] });
+      queryClient.invalidateQueries({ queryKey: ["stats"] });
+    },
+  });
+};
+
+// Optimistic Mutations
+
 export const useAddSticker = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data) => addStickerToCollect(data),
-    onSuccess: () => {
+    onMutate: async (newData) => {
+      // Cancela queries em andamento para não sobrescrever nosso estado otimista
+      await queryClient.cancelQueries({ queryKey: ["album", newData.email] });
+
+      // Salva o estado anterior do cache para o caso de precisar fazer rollback
+      const previousAlbum = queryClient.getQueryData(["album", newData.email]);
+
+      // Modifica o cache local otimisticamente
+      if (previousAlbum) {
+        queryClient.setQueryData(
+          ["album", newData.email],
+          previousAlbum.map((sticker) =>
+            sticker.number === newData.number
+              ? { ...sticker, amount: newData.amount }
+              : sticker,
+          ),
+        );
+      }
+      return { previousAlbum };
+    },
+    onError: (err, newData, context) => {
+      // Se a API falhar, desfaz a alteração retornando ao valor anterior
+      if (context?.previousAlbum) {
+        queryClient.setQueryData(
+          ["album", newData.email],
+          context.previousAlbum,
+        );
+      }
+      alert(
+        `Erro ao adicionar figurinha: ${err.message || "Tente novamente."}`,
+      );
+    },
+    onSettled: (data, error, variables) => {
+      // Invalida e sincroniza tudo com o banco em segundo plano
       queryClient.invalidateQueries({ queryKey: ["collection"] });
-      queryClient.invalidateQueries({ queryKey: ["album"] });
+      queryClient.invalidateQueries({ queryKey: ["album", variables.email] });
+      queryClient.invalidateQueries({ queryKey: ["stats", variables.email] });
     },
   });
 };
@@ -46,9 +114,37 @@ export const useUpdateSticker = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data) => updateStickerInCollect(data),
-    onSuccess: () => {
+    onMutate: async (newData) => {
+      await queryClient.cancelQueries({ queryKey: ["album", newData.email] });
+      const previousAlbum = queryClient.getQueryData(["album", newData.email]);
+
+      if (previousAlbum) {
+        queryClient.setQueryData(
+          ["album", newData.email],
+          previousAlbum.map((sticker) =>
+            sticker.number === newData.number
+              ? { ...sticker, amount: newData.amount }
+              : sticker,
+          ),
+        );
+      }
+      return { previousAlbum };
+    },
+    onError: (err, newData, context) => {
+      if (context?.previousAlbum) {
+        queryClient.setQueryData(
+          ["album", newData.email],
+          context.previousAlbum,
+        );
+      }
+      alert(
+        `Erro ao atualizar quantidade: ${err.message || "Tente novamente."}`,
+      );
+    },
+    onSettled: (data, error, variables) => {
       queryClient.invalidateQueries({ queryKey: ["collection"] });
-      queryClient.invalidateQueries({ queryKey: ["album"] });
+      queryClient.invalidateQueries({ queryKey: ["album", variables.email] });
+      queryClient.invalidateQueries({ queryKey: ["stats", variables.email] });
     },
   });
 };
@@ -57,9 +153,33 @@ export const useDeleteSticker = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ email, number }) => deleteStickerFromCollect(email, number),
-    onSuccess: () => {
+    onMutate: async ({ email, number }) => {
+      await queryClient.cancelQueries({ queryKey: ["album", email] });
+      const previousAlbum = queryClient.getQueryData(["album", email]);
+
+      if (previousAlbum) {
+        queryClient.setQueryData(
+          ["album", email],
+          previousAlbum.map((sticker) =>
+            sticker.number === number ? { ...sticker, amount: 0 } : sticker,
+          ),
+        );
+      }
+      return { previousAlbum };
+    },
+    onError: (err, variables, context) => {
+      if (context?.previousAlbum) {
+        queryClient.setQueryData(
+          ["album", variables.email],
+          context.previousAlbum,
+        );
+      }
+      alert(`Erro ao remover figurinha: ${err.message || "Tente novamente."}`);
+    },
+    onSettled: (data, error, variables) => {
       queryClient.invalidateQueries({ queryKey: ["collection"] });
-      queryClient.invalidateQueries({ queryKey: ["album"] });
+      queryClient.invalidateQueries({ queryKey: ["album", variables.email] });
+      queryClient.invalidateQueries({ queryKey: ["stats", variables.email] });
     },
   });
 };

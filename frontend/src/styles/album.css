@@ -23,3 +23,11 @@
   font-size: 32px;
   font-weight: bold;
 }
+
+.warning {
+  text-align: center;
+  justify-content: center;
+  color: var(--tertiary);
+  font-weight: bolder;
+  font-size: 30px;
+}

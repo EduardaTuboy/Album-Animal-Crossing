@@ -1,28 +1,32 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { useState } from 'react';
-import hammerIcon from '../assets/hammer-icon.png';
-import '../styles/collection.css';
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import hammerIcon from "../assets/hammer-icon.png";
+import "../styles/collection.css";
 
-import { StickersTable } from '../components/stickersTable';
-import { StickerModal } from '../components/stickerModal';
+import { StickersTable } from "../components/stickersTable";
+import { StickerModal } from "../components/stickerModal";
 import {
   useCollection,
-  useDeleteSticker,
-  useUpdateSticker,
-  useAddSticker,
-} from '../api/stickersQueries.js';
+  useCreateCatalogSticker, // Importa o hook de criação do catálogo
+  useUpdateCatalogSticker, // Importa o hook de edição do catálogo
+  useDeleteCatalogSticker, // Importa o hook de remoção do catálogo
+} from "../api/stickersQueries.js";
 
-export const Route = createFileRoute('/collection')({
+export const Route = createFileRoute("/collection")({
   component: Collection,
 });
 
 function Collection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSticker, setEditingSticker] = useState(null);
+
+  // Carrega a lista completa do catálogo geral
   const { data: stickersList = [] } = useCollection();
-  const deleteMutation = useDeleteSticker();
-  const updateMutation = useUpdateSticker();
-  const addMutation = useAddSticker();
+
+  // Inicializa as mutações corretas mapeadas para a tabela Stickers
+  const deleteMutation = useDeleteCatalogSticker();
+  const updateMutation = useUpdateCatalogSticker();
+  const addMutation = useCreateCatalogSticker();
 
   const handleEditClick = (sticker) => {
     setEditingSticker(sticker);
@@ -37,32 +41,37 @@ function Collection() {
   const handleDeleteSticker = async (number) => {
     if (
       !window.confirm(
-        'Tem a certeza que deseja eliminar este villager? Esta ação é irreversível.',
+        "Tem a certeza que deseja eliminar este villager? Esta ação é irreversível.",
       )
     ) {
       return;
     }
 
     try {
+      // Executa a remoção enviando apenas o 'number' exigido pela rota /delete/:number
       await deleteMutation.mutateAsync(number);
     } catch (error) {
-      console.error('Erro na requisição de eliminação:', error);
+      console.error("Erro na requisição de eliminação:", error);
     }
   };
 
   const handleSaveSticker = async (dadosSticker) => {
     if (editingSticker !== null) {
       try {
+        // Atualiza na tabela Stickers passando o id (number) e o body (data)
         await updateMutation.mutateAsync({
           number: editingSticker.number,
           data: dadosSticker,
         });
         handleCloseModal();
       } catch (error) {
-        console.error('Erro na requisição de edição:', error);
+        console.error("Erro na requisição de edição:", error);
       }
     } else {
-      const numerosOrdenados = stickersList.map((s) => s.number).sort((a, b) => a - b);
+      // Lógica de cálculo automática para o ID / Number do novo Villager
+      const numerosOrdenados = stickersList
+        .map((s) => s.number)
+        .sort((a, b) => a - b);
       let nextNumber = 1;
       for (const num of numerosOrdenados) {
         if (num === nextNumber) {
@@ -76,10 +85,11 @@ function Collection() {
       };
 
       try {
+        // Adiciona um novo registo à tabela Stickers via POST /add
         await addMutation.mutateAsync(novoStickerPayload);
         handleCloseModal();
       } catch (error) {
-        console.error('Erro na requisição de criação:', error);
+        console.error("Erro na requisição de criação:", error);
       }
     }
   };

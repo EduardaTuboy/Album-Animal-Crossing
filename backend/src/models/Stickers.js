@@ -147,10 +147,30 @@ export const updateStickerInCollect = async (email, number, amount) => {
   return result.rows[0];
 };
 
+export const getCollectItem = async (email, number) => {
+  const result = await db.query(
+    `SELECT * FROM Collect WHERE email=$1 AND number=$2;`,
+    [email, number],
+  );
+  return result.rows[0];
+};
+
 export const removeStickerFromCollect = async (email, number) => {
   const result = await db.query(
     `DELETE FROM Collect WHERE email=$1 AND number=$2 RETURNING *;`,
     [email, number],
   );
   return result.rowCount > 0;
+};
+
+export default {
+  getAllStickers,
+  getAlbumByEmail,
+  getUserStats,
+  insertSticker,
+  updateStickerByNumber,
+  deleteStickerByNumber,
+  addStickerToCollect,
+  updateStickerInCollect,
+  removeStickerFromCollect,
 };
