@@ -1,6 +1,7 @@
 import {
   useReactTable,
   getCoreRowModel,
+  getPaginationRowModel,
   flexRender,
 } from "@tanstack/react-table";
 import "../styles/table.css";
@@ -8,6 +9,10 @@ import "../styles/index.css";
 
 import editIcon from "../assets/edit.png";
 import deleteIcon from "../assets/delete2.png";
+import doubleArrowLeft from "../assets/double-arrow-left.png";
+import doubleArrowRight from "../assets/double-arrow-right.png";
+import arrowLeft from "../assets/arrow-left.png";
+import arrowRight from "../assets/arrow-right.png";
 
 const capitalizeFirstLetter = (valor) => {
   if (!valor) return ""; // Evita erros caso o campo venha nulo do banco
@@ -64,6 +69,12 @@ export function StickersTable({ data, onEdit, onDelete }) {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 10,
+      },
+    },
   });
 
   return (
@@ -96,6 +107,40 @@ export function StickersTable({ data, onEdit, onDelete }) {
           ))}
         </tbody>
       </table>
+      <div className="pagination">
+        <button
+          onClick={() => table.firstPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          <img src={doubleArrowLeft} alt="Start" />
+        </button>
+
+        <button
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          <img src={arrowLeft} alt="Previous" />
+        </button>
+
+        <span>
+          PAGE {table.getState().pagination.pageIndex + 1} OF{" "}
+          {table.getPageCount()}
+        </span>
+
+        <button
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          <img src={arrowRight} alt="Next" />
+        </button>
+
+        <button
+          onClick={() => table.lastPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          <img src={doubleArrowRight} alt="End" />
+        </button>
+      </div>
     </div>
   );
 }
