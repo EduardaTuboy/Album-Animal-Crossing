@@ -35,3 +35,4 @@ CREATE TABLE Collect (
     FOREIGN KEY (email) REFERENCES Users(email),
     FOREIGN KEY (number) REFERENCES Stickers(number)
 );
+

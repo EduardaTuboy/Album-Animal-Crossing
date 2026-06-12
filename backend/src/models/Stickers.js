@@ -134,7 +134,12 @@ export const deleteStickerByNumber = async (numberParam) => {
   return result.rows[0];
 };
 
-export const addStickerToCollect = async (email, number, amount, autograph = false) => {
+export const addStickerToCollect = async (
+  email,
+  number,
+  amount,
+  autograph = false,
+) => {
   const result = await db.query(
     `INSERT INTO Collect (email, number, amount, autograph) VALUES ($1, $2, $3, $4) RETURNING *;`,
     [email, number, amount, autograph],
@@ -142,7 +147,12 @@ export const addStickerToCollect = async (email, number, amount, autograph = fal
   return result.rows[0];
 };
 
-export const updateStickerInCollect = async (email, number, amount, autograph = false) => {
+export const updateStickerInCollect = async (
+  email,
+  number,
+  amount,
+  autograph = false,
+) => {
   const result = await db.query(
     `UPDATE Collect SET amount=$3, autograph=$4 WHERE email=$1 AND number=$2 RETURNING *;`,
     [email, number, amount, autograph],
