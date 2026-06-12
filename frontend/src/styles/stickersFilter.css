@@ -1,0 +1,46 @@
+.filter-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  align-items: center;
+  background-color: var(--secondary);
+  padding: 20px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.filter-bar select,
+.filter-bar button {
+  padding: 18px;
+  border-radius: 30px;
+  flex: 1;
+  min-width: 150px;
+  color: var(--secondary);
+  font-size: 20px;
+}
+
+.filter h2 {
+  background-color: var(--secondary);
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  width: 100%;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+}
+
+.delete {
+  display: flex;
+  background-color: var(--tertiary);
+  border: none;
+  color: var(--text) !important;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.delete img {
+  width: 20px;
+}

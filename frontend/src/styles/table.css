@@ -41,6 +41,17 @@
   background-color: var(--primary);
 }
 
+.sort-controll {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+}
+
+.sort-controll img {
+  width: 20px;
+}
+
 .inline-buttons button {
   margin: 5px;
   background-color: var(--secondary);
