@@ -7,9 +7,9 @@ import { StickersTable } from "../components/stickersTable";
 import { StickerModal } from "../components/stickerModal";
 import {
   useCollection,
-  useCreateCatalogSticker, // Importa o hook de criação do catálogo
-  useUpdateCatalogSticker, // Importa o hook de edição do catálogo
-  useDeleteCatalogSticker, // Importa o hook de remoção do catálogo
+  useCreateCatalogSticker,
+  useUpdateCatalogSticker,
+  useDeleteCatalogSticker,
 } from "../api/stickersQueries.js";
 
 export const Route = createFileRoute("/collection")({
@@ -20,10 +20,8 @@ function Collection() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingSticker, setEditingSticker] = useState(null);
 
-  // Carrega a lista completa do catálogo geral
   const { data: stickersList = [] } = useCollection();
 
-  // Inicializa as mutações corretas mapeadas para a tabela Stickers
   const deleteMutation = useDeleteCatalogSticker();
   const updateMutation = useUpdateCatalogSticker();
   const addMutation = useCreateCatalogSticker();
@@ -48,7 +46,6 @@ function Collection() {
     }
 
     try {
-      // Executa a remoção enviando apenas o 'number' exigido pela rota /delete/:number
       await deleteMutation.mutateAsync(number);
     } catch (error) {
       console.error("Erro na requisição de eliminação:", error);
@@ -58,7 +55,6 @@ function Collection() {
   const handleSaveSticker = async (dadosSticker) => {
     if (editingSticker !== null) {
       try {
-        // Atualiza na tabela Stickers passando o id (number) e o body (data)
         await updateMutation.mutateAsync({
           number: editingSticker.number,
           data: dadosSticker,
@@ -68,7 +64,7 @@ function Collection() {
         console.error("Erro na requisição de edição:", error);
       }
     } else {
-      // Lógica de cálculo automática para o ID / Number do novo Villager
+      // ID calculation
       const numerosOrdenados = stickersList
         .map((s) => s.number)
         .sort((a, b) => a - b);
@@ -85,7 +81,7 @@ function Collection() {
       };
 
       try {
-        // Adiciona um novo registo à tabela Stickers via POST /add
+        // POST /add
         await addMutation.mutateAsync(novoStickerPayload);
         handleCloseModal();
       } catch (error) {

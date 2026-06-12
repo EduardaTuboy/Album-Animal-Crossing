@@ -12,33 +12,23 @@ tbody = soup.find('tbody')
 dados_json = []
 personalidades_masculinas = ["Jock", "Cranky", "Smug", "Lazy"]
 
-# Itera sobre cada linha (tr) da tabela. start=1 cria o ID incremental começando em 1
 for id_incremental, row in enumerate(tbody.find_all('tr'), start=1):
     cols = row.find_all(['td', 'th'])
     
-    # Pula linhas que não tenham o número mínimo de colunas esperadas
-    # (ajuste o número 7 se a tabela tiver mais/menos colunas visíveis)
     if len(cols) < 7:
         continue
 
-    # --- 1. EXTRAÇÃO DOS DADOS DA TABELA ---
-    # IMPORTANTE: Ajuste os índices [0], [1], etc., conforme a ordem real das colunas na Wiki
     name = cols[0].get_text(strip=True)
     
-    # Extração da imagem: a Fandom costuma usar 'data-src' para imagens (lazy load), 
-    # ou 'src' normal. Este código tenta pegar a melhor URL disponível.
     img_tag = cols[1].find('img')
     url = ""
     if img_tag:
         url = img_tag.get('data-src') or img_tag.get('src', '')
 
-    personality = cols[2].get_text(strip=True)[2:]  # Remove os dois primeiros caracteres (ex: "1. Jock" -> "Jock")
     species = cols[3].get_text(strip=True)
     birthday = cols[4].get_text(strip=True)
-    catchphrase = cols[5].get_text(strip=True).strip('"') # Remove aspas comuns nos catchphrases
     hobbie = cols[6].get_text(strip=True)
 
-    # --- 2. CRIAÇÃO DOS CAMPOS ADICIONAIS ---
     gender = "male" if personality in personalidades_masculinas else "female"
 
     quantity={
@@ -118,7 +108,6 @@ for id_incremental, row in enumerate(tbody.find_all('tr'), start=1):
     }
 
 
-    # Montando o dicionário do personagem
     personagem = {
         "id": id_incremental,
         "name": name,
@@ -135,11 +124,9 @@ for id_incremental, row in enumerate(tbody.find_all('tr'), start=1):
     
     dados_json.append(personagem)
 
-# --- 3. EXPORTAÇÃO PARA JSON ---
 caminho_arquivo_json = 'animal_crossing_data.json'
 
 with open(caminho_arquivo_json, 'w', encoding='utf-8') as f:
-    # indent=4 deixa o JSON formatado de forma bonita (pretty print)
     json.dump(dados_json, f, ensure_ascii=False, indent=4)
 
 print(f"Sucesso! {len(dados_json)} personagens foram extraídos e salvos em {caminho_arquivo_json}.")

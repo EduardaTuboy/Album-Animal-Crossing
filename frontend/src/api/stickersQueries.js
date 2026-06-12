@@ -63,7 +63,7 @@ export const useDeleteCatalogSticker = () => {
   });
 };
 
-// Optimistic Mutations
+// Optimistic Mutations - rollback
 
 export const useAddSticker = () => {
   const queryClient = useQueryClient();
@@ -79,7 +79,11 @@ export const useAddSticker = () => {
           ["album", newData.email],
           previousAlbum.map((sticker) =>
             sticker.number === newData.number
-              ? { ...sticker, amount: newData.amount, autograph: newData.autograph ?? false }
+              ? {
+                  ...sticker,
+                  amount: newData.amount,
+                  autograph: newData.autograph ?? false,
+                }
               : sticker,
           ),
         );
@@ -118,7 +122,11 @@ export const useUpdateSticker = () => {
           ["album", newData.email],
           previousAlbum.map((sticker) =>
             sticker.number === newData.number
-              ? { ...sticker, amount: newData.amount, autograph: newData.autograph ?? false }
+              ? {
+                  ...sticker,
+                  amount: newData.amount,
+                  autograph: newData.autograph ?? false,
+                }
               : sticker,
           ),
         );
@@ -156,7 +164,9 @@ export const useDeleteSticker = () => {
         queryClient.setQueryData(
           ["album", email],
           previousAlbum.map((sticker) =>
-            sticker.number === number ? { ...sticker, amount: 0, autograph: false } : sticker,
+            sticker.number === number
+              ? { ...sticker, amount: 0, autograph: false }
+              : sticker,
           ),
         );
       }

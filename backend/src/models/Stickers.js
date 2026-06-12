@@ -1,6 +1,5 @@
 import db from "../config/db.js";
 
-// CORRIGIDO: Adicionado export e corrigido o retorno do PostgreSQL (result.rows)
 export const getAllStickers = async () => {
   const result = await db.query(`SELECT *
     FROM Stickers

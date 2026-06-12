@@ -32,6 +32,7 @@ function Album() {
     status: "",
   });
 
+  // Filter "Buffer"
   const filteredStickers = useMemo(() => {
     return stickers.filter((s) => {
       if (filters.species && s.species !== filters.species) return false;

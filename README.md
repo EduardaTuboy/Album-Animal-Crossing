@@ -63,7 +63,7 @@ DB_EXTERNAL_PORT=5432
 
 ```bash
 # na raiz do repositório
-sudo docker compose up --build -d
+sudo docker compose up --build
 # ver logs
 sudo docker compose logs -f
 # parar e apagar dados
