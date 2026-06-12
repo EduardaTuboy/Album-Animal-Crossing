@@ -45,6 +45,19 @@ export function StickersFilter({
     [data],
   );
 
+  const rarityOptions = useMemo(() => {
+    const order = ["common", "rare", "legendary"];
+    const uniq = Array.from(new Set(data.map((i) => i.rarity).filter(Boolean)));
+    return uniq.sort((a, b) => {
+      const ai = order.indexOf(String(a).toLowerCase());
+      const bi = order.indexOf(String(b).toLowerCase());
+      if (ai > -1 && bi > -1) return ai - bi;
+      if (ai > -1) return -1;
+      if (bi > -1) return 1;
+      return String(a).localeCompare(String(b));
+    });
+  }, [data]);
+
   const hasActiveFilters = Object.values(filters).some((val) => val !== "");
 
   return (
@@ -90,6 +103,17 @@ export function StickersFilter({
         >
           <option value="">BOTH GENDERS</option>
           {genderOptions.map((opt) => (
+            <option key={opt} value={opt}>
+              {capitalizeFirstLetter(opt)}
+            </option>
+          ))}
+        </select>
+        <select
+          value={filters.rarity || ""}
+          onChange={(e) => onFilterChange("rarity", e.target.value)}
+        >
+          <option value="">ALL RARITIES</option>
+          {rarityOptions.map((opt) => (
             <option key={opt} value={opt}>
               {capitalizeFirstLetter(opt)}
             </option>

@@ -77,6 +77,7 @@ export function StickersTable({ data, onEdit, onDelete }) {
         header: "Rarity",
         accessorKey: "rarity",
         enableSorting: false,
+        filterFn: "equalsString",
         cell: (info) => capitalizeFirstLetter(info.getValue()),
       },
       { header: "Total", accessorKey: "total", enableSorting: false },
@@ -129,6 +130,7 @@ export function StickersTable({ data, onEdit, onDelete }) {
           hobbie: table.getColumn("hobbie")?.getFilterValue() ?? "",
           personality: table.getColumn("personality")?.getFilterValue() ?? "",
           gender: table.getColumn("gender")?.getFilterValue() ?? "",
+          rarity: table.getColumn("rarity")?.getFilterValue() ?? "",
         }}
         onFilterChange={(coluna, valor) => {
           table.getColumn(coluna)?.setFilterValue(valor);

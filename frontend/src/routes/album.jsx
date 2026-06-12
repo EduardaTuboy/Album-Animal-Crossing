@@ -28,6 +28,7 @@ function Album() {
     hobbie: "",
     personality: "",
     gender: "",
+    rarity: "",
     status: "",
   });
 
@@ -38,6 +39,7 @@ function Album() {
       if (filters.personality && s.personality !== filters.personality)
         return false;
       if (filters.gender && s.gender !== filters.gender) return false;
+      if (filters.rarity && s.rarity !== filters.rarity) return false;
 
       if (filters.status) {
         const amount = s.amount || 0;
@@ -80,6 +82,7 @@ function Album() {
             hobbie: "",
             personality: "",
             gender: "",
+            rarity: "",
             status: "",
           });
           setCurrentSpeciesIndex(0);
