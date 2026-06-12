@@ -191,10 +191,7 @@ export function StickersTable({ data, onEdit, onDelete }) {
             ))
           ) : (
             <tr>
-              <td
-                colSpan={columns.length}
-                style={{ textAlign: "center", padding: "20px" }}
-              >
+              <td colSpan={columns.length}>
                 Nenhuma figurinha encontrada com estes critérios.
               </td>
             </tr>
@@ -204,16 +201,7 @@ export function StickersTable({ data, onEdit, onDelete }) {
 
       {/* Pagination */}
       {table.getPageCount() > 1 && (
-        <div
-          className="pagination"
-          style={{
-            display: "flex",
-            gap: "10px",
-            marginTop: "15px",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
+        <div className="pagination">
           <button
             onClick={() => table.firstPage()}
             disabled={!table.getCanPreviousPage()}

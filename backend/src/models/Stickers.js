@@ -1,7 +1,10 @@
-import db from '../config/db.js';
+import db from "../config/db.js";
 
+// CORRIGIDO: Adicionado export e corrigido o retorno do PostgreSQL (result.rows)
 export const getAllStickers = async () => {
-  const result = await db.query(`SELECT * FROM Stickers ORDER BY number ASC;`);
+  const result = await db.query(`SELECT *
+    FROM Stickers
+    ORDER BY number ASC;`);
   return result.rows;
 };
 
@@ -21,7 +24,7 @@ export const getAlbumByEmail = async (email) => {
     FROM Stickers s
     LEFT JOIN Collect c ON s.number = c.number AND c.email = $1
     ORDER BY s.number ASC;`,
-    [email]
+    [email],
   );
   return result.rows;
 };
@@ -81,7 +84,7 @@ export const insertSticker = async (sticker) => {
       catchphrase,
       birthday || null,
       hobbie,
-    ]
+    ],
   );
   return result.rows[0];
 };
@@ -114,22 +117,40 @@ export const updateStickerByNumber = async (numberParam, sticker) => {
       birthday || null,
       hobbie,
       numberParam,
-    ]
+    ],
   );
   return result.rows[0];
 };
 
 export const deleteStickerByNumber = async (numberParam) => {
-  await db.query('DELETE FROM Collect WHERE number = $1', [numberParam]);
-  const result = await db.query('DELETE FROM Stickers WHERE number = $1 RETURNING *', [numberParam]);
+  await db.query("DELETE FROM Collect WHERE number = $1", [numberParam]);
+  const result = await db.query(
+    "DELETE FROM Stickers WHERE number = $1 RETURNING *",
+    [numberParam],
+  );
   return result.rows[0];
 };
 
-export default {
-  getAllStickers,
-  getAlbumByEmail,
-  getUserStats,
-  insertSticker,
-  updateStickerByNumber,
-  deleteStickerByNumber,
+export const addStickerToCollect = async (email, number, amount) => {
+  const result = await db.query(
+    `INSERT INTO Collect (email, number, amount) VALUES ($1, $2, $3) RETURNING *;`,
+    [email, number, amount],
+  );
+  return result.rows[0];
+};
+
+export const updateStickerInCollect = async (email, number, amount) => {
+  const result = await db.query(
+    `UPDATE Collect SET amount=$3 WHERE email=$1 AND number=$2 RETURNING *;`,
+    [email, number, amount],
+  );
+  return result.rows[0];
+};
+
+export const removeStickerFromCollect = async (email, number) => {
+  const result = await db.query(
+    `DELETE FROM Collect WHERE email=$1 AND number=$2 RETURNING *;`,
+    [email, number],
+  );
+  return result.rowCount > 0;
 };

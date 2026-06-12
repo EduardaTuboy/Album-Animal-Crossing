@@ -27,7 +27,7 @@
 }
 
 .table thead th {
-  padding: 8px;
+  padding: 8px 0px;
   text-align: left;
 }
 
@@ -45,7 +45,6 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  justify-content: center;
 }
 
 .sort-controll img {
@@ -70,6 +69,8 @@
   display: flex;
   gap: 10px;
   margin-top: 30px;
+  align-items: center;
+  justify-content: center;
 }
 
 .pagination button {

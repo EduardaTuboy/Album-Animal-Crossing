@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  # 1. O NOSSO BANCO DE DADOS (PostgreSQL)
+  db:
+    image: postgres:15-alpine
+    container_name: animal_crossing_db
+    environment:
+      POSTGRES_USER: postgres # Substitua pelo utilizador que usa
+      POSTGRES_PASSWORD: admin # Substitua pela sua password
+      POSTGRES_DB: animal_crossing # Nome da sua base de dados
+    ports:
+      - "5444:5432" # Expõe a porta 5433 para o seu computador
+    volumes:
+      - pgdata:/var/lib/postgresql/data # Isto garante que os dados não se apagam se desligar o Docker!
+
+  # 2. O SEU BACKEND
+  backend:
+    build: ./backend # Diz ao Docker para ler o Dockerfile da pasta backend
+    container_name: animal_crossing_backend
+    ports:
+      - "5000:5000" # Liga a porta 5000 do Docker à 5000 do seu PC
+    environment:
+      # Variáveis de ambiente para o seu backend saber onde está o banco de dados
+      - DB_HOST=db # IMPORTANTE: Dentro do Docker, o host já não é 'localhost', é 'db' (o nome do serviço acima)!
+      - DB_USER=postgres
+      - DB_PASSWORD=admin
+      - DB_NAME=animal_crossing
+      - DB_PORT=5432
+    depends_on:
+      - db # O backend só liga depois do banco de dados estar pronto
+
+  # 3. O SEU FRONTEND
+  frontend:
+    build: ./frontend # Lê o Dockerfile da pasta frontend
+    container_name: animal_crossing_frontend
+    ports:
+      - "5173:5173" # Liga o Vite à sua porta 5173
+    depends_on:
+      - backend # O frontend só liga depois do backend
+
+# Declaração do volume persistente para a base de dados
+volumes:
+  pgdata:

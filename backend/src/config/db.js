@@ -1,11 +1,12 @@
-import pg from 'pg';
+import pg from "pg";
+const { Pool } = pg;
 
-const pool = new pg.Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: parseInt(process.env.DB_PORT || '5432'),
+const pool = new Pool({
+  user: process.env.DB_USER || "postgres",
+  password: process.env.DB_PASSWORD || "admin",
+  host: process.env.DB_HOST || "localhost",
+  port: process.env.DB_PORT || 5432,
+  database: process.env.DB_NAME || "animal_crossing",
 });
 
 export default pool;
