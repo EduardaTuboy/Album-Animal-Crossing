@@ -11,10 +11,15 @@ import "../styles/stickers.css";
 function Sticker(props) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [draftAmount, setDraftAmount] = useState(props.amount || 0);
+  const [draftAutograph, setDraftAutograph] = useState(!!props.autograph);
 
   useEffect(() => {
     setDraftAmount(props.amount || 0);
   }, [props.amount]);
+
+  useEffect(() => {
+    setDraftAutograph(!!props.autograph);
+  }, [props.autograph]);
 
   const { mutate: addSticker, isPending: isAdding } = useAddSticker();
   const { mutate: updateSticker, isPending: isUpdating } = useUpdateSticker();
@@ -30,29 +35,26 @@ function Sticker(props) {
     e.stopPropagation();
     const currentAmount = props.amount || 0;
 
-    // Objeto padrão para enviar ao backend
     const payload = {
       email: props.email,
       number: props.number,
       amount: draftAmount,
+      autograph: draftAutograph,
     };
 
-    // Add new sticker, it go unlocked
     if (currentAmount === 0 && draftAmount > 0) {
       addSticker(payload, { onSuccess: () => setIsExpanded(false) });
     }
-    // Delete the only sticker, it go missing
     else if (currentAmount > 0 && draftAmount === 0) {
       deleteSticker(
         { email: props.email, number: props.number },
         { onSuccess: () => setIsExpanded(false) },
       );
     }
-    // Update amount
     else if (
       currentAmount > 0 &&
       draftAmount > 0 &&
-      draftAmount !== currentAmount
+      draftAmount !== currentAmount || draftAutograph !== !!props.autograph
     ) {
       updateSticker(payload, { onSuccess: () => setIsExpanded(false) });
     } else {
@@ -62,6 +64,7 @@ function Sticker(props) {
   const handleCancel = (e) => {
     e.stopPropagation();
     setDraftAmount(props.amount || 0);
+    setDraftAutograph(!!props.autograph);
     setIsExpanded(false);
   };
 
@@ -132,6 +135,11 @@ function Sticker(props) {
               </button>
             </div>
 
+            <label style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "8px" }}>
+              <input type="checkbox" checked={draftAutograph} onChange={(e) => setDraftAutograph(e.target.checked)} />
+              Autograph
+            </label>
+
             <div className="cancel-confirm">
               <button
                 onClick={handleCancel}
@@ -143,7 +151,7 @@ function Sticker(props) {
               <button
                 className="confirm"
                 onClick={handleConfirm}
-                disabled={isPending || draftAmount === (props.amount || 0)}
+                disabled={isPending || (draftAmount === (props.amount || 0) && draftAutograph === !!props.autograph)}
               >
                 {isPending ? "Loading..." : "CONFIRM"}
               </button>

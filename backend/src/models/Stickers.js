@@ -16,8 +16,11 @@ export const getAlbumByEmail = async (email) => {
       s.species,
       s.personality,
       s.gender,
+      s.rarity,
+      s.total,
       s.url AS image_url,
       COALESCE(c.amount, 0)::int AS amount,
+      COALESCE(c.autograph, false) AS autograph,
       s.catchphrase,
       s.birthday,
       s.hobbie
@@ -131,18 +134,18 @@ export const deleteStickerByNumber = async (numberParam) => {
   return result.rows[0];
 };
 
-export const addStickerToCollect = async (email, number, amount) => {
+export const addStickerToCollect = async (email, number, amount, autograph = false) => {
   const result = await db.query(
-    `INSERT INTO Collect (email, number, amount) VALUES ($1, $2, $3) RETURNING *;`,
-    [email, number, amount],
+    `INSERT INTO Collect (email, number, amount, autograph) VALUES ($1, $2, $3, $4) RETURNING *;`,
+    [email, number, amount, autograph],
   );
   return result.rows[0];
 };
 
-export const updateStickerInCollect = async (email, number, amount) => {
+export const updateStickerInCollect = async (email, number, amount, autograph = false) => {
   const result = await db.query(
-    `UPDATE Collect SET amount=$3 WHERE email=$1 AND number=$2 RETURNING *;`,
-    [email, number, amount],
+    `UPDATE Collect SET amount=$3, autograph=$4 WHERE email=$1 AND number=$2 RETURNING *;`,
+    [email, number, amount, autograph],
   );
   return result.rows[0];
 };

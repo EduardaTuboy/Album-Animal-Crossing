@@ -70,19 +70,16 @@ export const useAddSticker = () => {
   return useMutation({
     mutationFn: (data) => addStickerToCollect(data),
     onMutate: async (newData) => {
-      // Cancela queries em andamento para não sobrescrever nosso estado otimista
       await queryClient.cancelQueries({ queryKey: ["album", newData.email] });
 
-      // Salva o estado anterior do cache para o caso de precisar fazer rollback
       const previousAlbum = queryClient.getQueryData(["album", newData.email]);
 
-      // Modifica o cache local otimisticamente
       if (previousAlbum) {
         queryClient.setQueryData(
           ["album", newData.email],
           previousAlbum.map((sticker) =>
             sticker.number === newData.number
-              ? { ...sticker, amount: newData.amount }
+              ? { ...sticker, amount: newData.amount, autograph: newData.autograph ?? false }
               : sticker,
           ),
         );
@@ -90,7 +87,6 @@ export const useAddSticker = () => {
       return { previousAlbum };
     },
     onError: (err, newData, context) => {
-      // Se a API falhar, desfaz a alteração retornando ao valor anterior
       if (context?.previousAlbum) {
         queryClient.setQueryData(
           ["album", newData.email],
@@ -102,7 +98,6 @@ export const useAddSticker = () => {
       );
     },
     onSettled: (data, error, variables) => {
-      // Invalida e sincroniza tudo com o banco em segundo plano
       queryClient.invalidateQueries({ queryKey: ["collection"] });
       queryClient.invalidateQueries({ queryKey: ["album", variables.email] });
       queryClient.invalidateQueries({ queryKey: ["stats", variables.email] });
@@ -123,7 +118,7 @@ export const useUpdateSticker = () => {
           ["album", newData.email],
           previousAlbum.map((sticker) =>
             sticker.number === newData.number
-              ? { ...sticker, amount: newData.amount }
+              ? { ...sticker, amount: newData.amount, autograph: newData.autograph ?? false }
               : sticker,
           ),
         );
@@ -161,7 +156,7 @@ export const useDeleteSticker = () => {
         queryClient.setQueryData(
           ["album", email],
           previousAlbum.map((sticker) =>
-            sticker.number === number ? { ...sticker, amount: 0 } : sticker,
+            sticker.number === number ? { ...sticker, amount: 0, autograph: false } : sticker,
           ),
         );
       }
