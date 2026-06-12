@@ -1,4 +1,9 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  addStickerToCollect,
+  updateStickerInCollect,
+  deleteStickerFromCollect,
+} from "./stickersApi.js";
 import * as stickersApi from "./stickersApi.js";
 
 export const useStats = (email) =>
@@ -25,12 +30,14 @@ export const useCollection = () =>
     staleTime: 1000 * 60 * 2,
   });
 
+// E altere as funções de mutação:
 export const useAddSticker = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (sticker) => stickersApi.addSticker(sticker),
+    mutationFn: (data) => addStickerToCollect(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["collection"] }); // Também precisa de objeto na v5
+      queryClient.invalidateQueries({ queryKey: ["collection"] });
+      queryClient.invalidateQueries({ queryKey: ["album"] });
     },
   });
 };
@@ -38,9 +45,10 @@ export const useAddSticker = () => {
 export const useUpdateSticker = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ number, data }) => stickersApi.updateSticker(number, data),
+    mutationFn: (data) => updateStickerInCollect(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["collection"] });
+      queryClient.invalidateQueries({ queryKey: ["album"] });
     },
   });
 };
@@ -48,9 +56,10 @@ export const useUpdateSticker = () => {
 export const useDeleteSticker = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (number) => stickersApi.deleteSticker(number),
+    mutationFn: ({ email, number }) => deleteStickerFromCollect(email, number),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["collection"] });
+      queryClient.invalidateQueries({ queryKey: ["album"] });
     },
   });
 };

@@ -108,7 +108,7 @@ export function StickersFilter({
             <option value="repeating">REPEATING (2+)</option>
           </select>
         )}
-        ;
+
         {hasActiveFilters && (
           <button onClick={onClearFilters} className="delete">
             <img src={deleteIcon} alt="Delete" />

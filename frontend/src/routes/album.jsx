@@ -94,6 +94,7 @@ function Album() {
               return (
                 <Sticker
                   key={sticker.number}
+                  email={currentUserEmail}
                   number={sticker.number}
                   name={isOwned ? sticker.name : "???"}
                   gender={isOwned ? sticker.gender : "???"}

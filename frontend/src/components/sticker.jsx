@@ -1,10 +1,74 @@
-import React from "react";
+import React, { useState } from "react";
 import female from "../assets/female.png";
 import male from "../assets/male.png";
+import {
+  useUpdateSticker,
+  useAddSticker,
+  useDeleteSticker,
+} from "../api/stickersQueries.js";
+import "../styles/stickers.css";
 
 function Sticker(props) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [draftAmount, setDraftAmount] = useState(props.amount || 0);
+
+  // Trazemos as TRÊS armas do nosso arsenal
+  const { mutate: addSticker, isPending: isAdding } = useAddSticker();
+  const { mutate: updateSticker, isPending: isUpdating } = useUpdateSticker();
+  const { mutate: deleteSticker, isPending: isDeleting } = useDeleteSticker();
+
+  const isPending = isAdding || isUpdating || isDeleting;
+
+  let currentStatus = "MISSING";
+  if (draftAmount === 1) currentStatus = "UNLOCKED";
+  if (draftAmount >= 2) currentStatus = "REPEATING";
+
+  const handleConfirm = (e) => {
+    e.stopPropagation();
+    const currentAmount = props.amount || 0;
+
+    // Objeto padrão para enviar ao backend
+    const payload = {
+      email: props.email,
+      number: props.number,
+      amount: draftAmount,
+    };
+
+    // CENÁRIO 1: Adicionar novo
+    if (currentAmount === 0 && draftAmount > 0) {
+      addSticker(payload, { onSuccess: () => setIsExpanded(false) });
+    }
+    // CENÁRIO 2: Deletar (Reduziu para 0)
+    else if (currentAmount > 0 && draftAmount === 0) {
+      // O delete só precisa do email e do number
+      deleteSticker(
+        { email: props.email, number: props.number },
+        { onSuccess: () => setIsExpanded(false) },
+      );
+    }
+    // CENÁRIO 3: Atualizar a quantidade
+    else if (
+      currentAmount > 0 &&
+      draftAmount > 0 &&
+      draftAmount !== currentAmount
+    ) {
+      updateSticker(payload, { onSuccess: () => setIsExpanded(false) });
+    } else {
+      setIsExpanded(false);
+    }
+  };
+  const handleCancel = (e) => {
+    e.stopPropagation();
+    setDraftAmount(props.amount || 0);
+    setIsExpanded(false);
+  };
+
   return (
-    <div className="sticker">
+    <div
+      className={`sticker ${isExpanded ? "expanded" : ""}`}
+      onClick={() => setIsExpanded(!isExpanded)}
+      style={{ cursor: "pointer", transition: "all 0.3s ease" }}
+    >
       <div className="line">
         <span
           style={{
@@ -28,7 +92,9 @@ function Sticker(props) {
           {props.amount}
         </div>
       </div>
+
       <img src={props.image} alt="image URL" />
+
       <div
         className={"card chip"}
         style={{
@@ -44,6 +110,44 @@ function Sticker(props) {
           />
         </div>
         <p className="description">{props.description}</p>
+
+        {/* Hidden Edition */}
+        {isExpanded && (
+          <div className="edit-section" onClick={(e) => e.stopPropagation()}>
+            <span>{currentStatus}</span>
+
+            <div className="amount-control">
+              <button
+                onClick={() => setDraftAmount((prev) => Math.max(0, prev - 1))}
+              >
+                -
+              </button>
+
+              <span>{draftAmount}</span>
+
+              <button onClick={() => setDraftAmount((prev) => prev + 1)}>
+                +
+              </button>
+            </div>
+
+            <div className="cancel-confirm">
+              <button
+                onClick={handleCancel}
+                disabled={isPending}
+                className="cancel"
+              >
+                CANCEL
+              </button>
+              <button
+                className="confirm"
+                onClick={handleConfirm}
+                disabled={isPending || draftAmount === (props.amount || 0)}
+              >
+                {isPending ? "Loading..." : "CONFIRM"}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
