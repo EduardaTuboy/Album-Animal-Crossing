@@ -24,7 +24,6 @@ export const Route = createRootRoute({
 
       <footer>
         <p> © 2026 Eduarda Tuboy. Todos os direitos reservados.</p>
-        <p>Agradecimento a Visio.ai pela oportunidade :)</p>
         <p> Créditos:</p>
         <ul>
           <li>

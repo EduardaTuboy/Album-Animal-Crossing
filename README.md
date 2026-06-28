@@ -1,6 +1,6 @@
 # Álbum Animal Crossing — Album de Figurinhas (Full Stack)
 
-Projeto de um álbum de figurinhas digital com backend em Node.js/Express e frontend em React + TanStack para Visio.ia :)
+Projeto de um álbum de figurinhas digital com backend em Node.js/Express e frontend em React + TanStack :)
 
 **Tema:** Animal Crossing
 
