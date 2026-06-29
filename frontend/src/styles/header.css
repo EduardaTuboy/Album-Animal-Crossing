@@ -41,7 +41,7 @@ nav a.active {
 
 nav a.hover {
   /* not working for now */
-  color: var(--highligh);
+  color: var(--highlight);
 }
 
 nav img {

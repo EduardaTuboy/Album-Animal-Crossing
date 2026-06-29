@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ExchangesRouteImport } from './routes/exchanges'
 import { Route as CollectionRouteImport } from './routes/collection'
 import { Route as AlbumRouteImport } from './routes/album'
 import { Route as IndexRouteImport } from './routes/index'
@@ -17,6 +18,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExchangesRoute = ExchangesRouteImport.update({
+  id: '/exchanges',
+  path: '/exchanges',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CollectionRoute = CollectionRouteImport.update({
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/album': typeof AlbumRoute
   '/collection': typeof CollectionRoute
+  '/exchanges': typeof ExchangesRoute
   '/login': typeof LoginRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/album': typeof AlbumRoute
   '/collection': typeof CollectionRoute
+  '/exchanges': typeof ExchangesRoute
   '/login': typeof LoginRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/album': typeof AlbumRoute
   '/collection': typeof CollectionRoute
+  '/exchanges': typeof ExchangesRoute
   '/login': typeof LoginRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/album' | '/collection' | '/login'
+  fullPaths: '/' | '/album' | '/collection' | '/exchanges' | '/login'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/album' | '/collection' | '/login'
-  id: '__root__' | '/' | '/album' | '/collection' | '/login'
+  to: '/' | '/album' | '/collection' | '/exchanges' | '/login'
+  id: '__root__' | '/' | '/album' | '/collection' | '/exchanges' | '/login'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlbumRoute: typeof AlbumRoute
   CollectionRoute: typeof CollectionRoute
+  ExchangesRoute: typeof ExchangesRoute
   LoginRoute: typeof LoginRoute
 }
 
@@ -76,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exchanges': {
+      id: '/exchanges'
+      path: '/exchanges'
+      fullPath: '/exchanges'
+      preLoaderRoute: typeof ExchangesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/collection': {
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlbumRoute: AlbumRoute,
   CollectionRoute: CollectionRoute,
+  ExchangesRoute: ExchangesRoute,
   LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport

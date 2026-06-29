@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import Villager from "../components/villager.jsx";
-import { useUpdateAvatar, useUserProfile } from "../api/usersQueries.js"; // Importe o novo hook
+import { useUpdateAvatar, useUserProfile } from "../api/usersQueries.js";
 import "../styles/login.css";
 
 export const Route = createFileRoute("/login")({
