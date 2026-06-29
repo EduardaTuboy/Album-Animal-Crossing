@@ -22,7 +22,12 @@ CREATE TABLE Users (
     email VARCHAR(255) PRIMARY KEY,
     username VARCHAR(20),
     password VARCHAR(255),
-    role VARCHAR(20)
+    role VARCHAR(20),
+    skin_index INTEGER DEFAULT 0,
+    eyes_index INTEGER DEFAULT 0,
+    hair_index INTEGER DEFAULT 0,
+    hair_color VARCHAR(7) DEFAULT '#442200',
+    eyes_color VARCHAR(7) DEFAULT '#442200'
 );
 
 CREATE TABLE Collect (

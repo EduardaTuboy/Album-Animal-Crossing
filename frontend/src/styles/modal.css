@@ -54,7 +54,7 @@
 select {
   width: 100%;
   padding: 12px;
-  border: 0;
+  border: none;
   border-radius: 10px;
   background-color: var(--text);
   font-size: 18px;

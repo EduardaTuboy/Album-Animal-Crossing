@@ -54,7 +54,7 @@
 .inline-buttons button {
   margin: 5px;
   background-color: var(--secondary);
-  border: 0;
+  border: none;
   padding: 5px;
   border-radius: 5px;
   width: 30px;

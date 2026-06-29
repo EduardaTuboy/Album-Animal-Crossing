@@ -1,29 +1,15 @@
-.villager {
-  position: relative;
-
-  width: 200px;
-  height: 200px;
+.save-avatar {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
 }
 
-.villager img {
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 100%;
-
-  object-fit: cover;
-}
-
-.villager img:nth-child(1) {
-  z-index: 1;
-}
-
-.villager img:nth-child(2) {
-  z-index: 2;
-}
-
-.villager img:nth-child(3) {
-  z-index: 3;
+.save-avatar button {
+  background-color: var(--secondary);
+  color: var(--text);
+  padding: 10px 20px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 30px;
+  border: none;
 }
