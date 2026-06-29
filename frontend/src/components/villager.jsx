@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../styles/villager.css";
-import { skins, eyes, hairs } from "../villagerAssets";
+import { skins, eyes, hairs, glasses, beards } from "../villagerAssets";
 
 function AttributeControl({ label, currentIndex, totalItems, setIndex }) {
   const nextItem = (current, total) => (current + 1) % total;
@@ -52,10 +52,14 @@ export default function Villager({
   skinIndex = 0,
   eyesIndex = 0,
   hairIndex = 0,
+  glassesIndex = 0,
+  beardIndex = 0,
   editable = false,
   setSkinIndex,
   setEyesIndex,
   setHairIndex,
+  setGlassesIndex,
+  setBeardIndex,
   hairColor = "#442200",
   eyesColor = "#442200",
   setHairColor,
@@ -88,6 +92,20 @@ export default function Villager({
       color: hairColor,
       setColor: setHairColor,
       blendMode: "screen",
+    },
+    {
+      id: "glasses",
+      label: "Glasses",
+      assets: glasses,
+      index: glassesIndex,
+      setIndex: setGlassesIndex,
+    },
+    {
+      id: "beard",
+      label: "Beard",
+      assets: beards,
+      index: beardIndex,
+      setIndex: setBeardIndex,
     },
   ];
 

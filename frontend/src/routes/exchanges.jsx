@@ -19,6 +19,8 @@ function Exchanges() {
         skin: 1,
         eyes: 17,
         hair: 17,
+        glasses: 0,
+        beard: 0,
         hairColor: "#000000",
         eyesColor: "#000000",
       },
@@ -52,6 +54,8 @@ function Exchanges() {
         skin: 3,
         eyes: 3,
         hair: 6,
+        glasses: 1,
+        beard: 1,
         hairColor: "#442200",
         eyesColor: "#442200",
       },
@@ -104,6 +108,8 @@ function Exchanges() {
                 skinIndex={exchange.userAvatar.skin}
                 eyesIndex={exchange.userAvatar.eyes}
                 hairIndex={exchange.userAvatar.hair}
+                glassesIndex={exchange.userAvatar.glasses}
+                beardIndex={exchange.userAvatar.beard}
                 editable={false}
                 hairColor={exchange.userAvatar.hairColor}
                 eyesColor={exchange.userAvatar.eyesColor}

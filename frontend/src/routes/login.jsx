@@ -12,6 +12,8 @@ function Login() {
   const [skin, setSkin] = useState(0);
   const [eyes, setEyes] = useState(0);
   const [hair, setHair] = useState(0);
+  const [glasses, setGlasses] = useState(0);
+  const [beard, setBeard] = useState(0);
   const [hairColor, setHairColor] = useState("#442200");
   const [eyesColor, setEyesColor] = useState("#442200");
 
@@ -52,10 +54,14 @@ function Login() {
         skinIndex={skin}
         eyesIndex={eyes}
         hairIndex={hair}
+        glassesIndex={glasses}
+        beardIndex={beard}
         editable={true}
         setSkinIndex={setSkin}
         setEyesIndex={setEyes}
         setHairIndex={setHair}
+        setGlassesIndex={setGlasses}
+        setBeardIndex={setBeard}
         hairColor={hairColor}
         setHairColor={setHairColor}
         eyesColor={eyesColor}

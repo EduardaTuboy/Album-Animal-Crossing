@@ -30,6 +30,12 @@
 .villager-avatar img:nth-child(3) {
   z-index: 3;
 }
+.villager-avatar img:nth-child(4) {
+  z-index: 4;
+}
+.villager-avatar img:nth-child(5) {
+  z-index: 5;
+}
 
 .villager-controls {
   display: flex;

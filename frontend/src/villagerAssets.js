@@ -78,6 +78,10 @@ import hair39 from "./assets/custom_villager/hair39.png";
 import hair40 from "./assets/custom_villager/hair40.png";
 import hair41 from "./assets/custom_villager/hair41.png";
 import hair42 from "./assets/custom_villager/hair42.png";
+import glasses1 from "./assets/custom_villager/glasses1.png";
+import glasses2 from "./assets/custom_villager/glasses2.png";
+import beard1 from "./assets/custom_villager/beard1.png";
+import beard2 from "./assets/custom_villager/beard2.png";
 
 export const skins = [
   skin1,
@@ -165,3 +169,7 @@ export const hairs = [
   hair41,
   hair42,
 ];
+
+export const glasses = [glasses1, glasses2];
+
+export const beards = [beard1, beard2];
