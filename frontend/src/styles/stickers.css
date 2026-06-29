@@ -83,7 +83,6 @@
 }
 
 .edit-section {
-  margin-top: 15px;
   padding: 15px;
   border-radius: 8px;
   display: flex;
@@ -99,12 +98,13 @@
   margin-bottom: 10px;
 }
 
+/* Amount control */
+
 .amount-control {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 15px;
-  margin-bottom: 15px;
 }
 
 .amount-control button {
@@ -122,6 +122,58 @@
   color: var(--secondary);
 }
 
+.edit-section label {
+  display: flex;
+  gap: 8px;
+  margin: 10px;
+}
+
+/* Autograph switch button */
+.switch-input {
+  /* hides the default checkbox */
+  position: absolute;
+  opacity: 0;
+  height: 0;
+  width: 0;
+
+  cursor: pointer;
+}
+
+.switch-button {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease;
+  border: 0;
+  /* prevent cascading displacement of other elements */
+  max-height: 30px;
+}
+
+.switch-button.inactive {
+  background-color: var(--inactive);
+  color: var(--inactive-text);
+}
+
+.switch-button.active {
+  background-color: var(--primary);
+  color: var(--text);
+}
+
+.switch-button:hover {
+  font-size: 16px;
+  /* recenters text */
+  padding-top: 6px;
+}
+
+/* Cancel and confirm buttons */
 .cancel-confirm {
   display: flex;
   gap: 10px;

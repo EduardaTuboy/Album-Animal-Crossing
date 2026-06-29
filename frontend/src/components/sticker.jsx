@@ -44,17 +44,14 @@ function Sticker(props) {
 
     if (currentAmount === 0 && draftAmount > 0) {
       addSticker(payload, { onSuccess: () => setIsExpanded(false) });
-    }
-    else if (currentAmount > 0 && draftAmount === 0) {
+    } else if (currentAmount > 0 && draftAmount === 0) {
       deleteSticker(
         { email: props.email, number: props.number },
         { onSuccess: () => setIsExpanded(false) },
       );
-    }
-    else if (
-      currentAmount > 0 &&
-      draftAmount > 0 &&
-      draftAmount !== currentAmount || draftAutograph !== !!props.autograph
+    } else if (
+      (currentAmount > 0 && draftAmount > 0 && draftAmount !== currentAmount) ||
+      draftAutograph !== !!props.autograph
     ) {
       updateSticker(payload, { onSuccess: () => setIsExpanded(false) });
     } else {
@@ -135,8 +132,15 @@ function Sticker(props) {
               </button>
             </div>
 
-            <label style={{ display: "flex", alignItems: "center", gap: "8px", marginTop: "8px" }}>
-              <input type="checkbox" checked={draftAutograph} onChange={(e) => setDraftAutograph(e.target.checked)} />
+            <label
+              className={`switch-button ${draftAutograph ? "active" : "inactive"}`}
+            >
+              <input
+                type="checkbox"
+                className="switch-input"
+                checked={draftAutograph}
+                onChange={(e) => setDraftAutograph(e.target.checked)}
+              />
               Autograph
             </label>
 
@@ -151,7 +155,11 @@ function Sticker(props) {
               <button
                 className="confirm"
                 onClick={handleConfirm}
-                disabled={isPending || (draftAmount === (props.amount || 0) && draftAutograph === !!props.autograph)}
+                disabled={
+                  isPending ||
+                  (draftAmount === (props.amount || 0) &&
+                    draftAutograph === !!props.autograph)
+                }
               >
                 {isPending ? "Loading..." : "CONFIRM"}
               </button>
