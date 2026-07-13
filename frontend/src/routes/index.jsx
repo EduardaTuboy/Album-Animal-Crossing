@@ -66,7 +66,7 @@ function DashboardStats() {
           </div>
         ))}
       </div>
-      <Redd />
+      <Redd email={currentUserEmail} />
     </main>
   );
 }

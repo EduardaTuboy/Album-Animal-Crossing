@@ -84,7 +84,12 @@ export const addToCollection = async (req, res) => {
         .status(409)
         .json({ error: "Item já existe na coleção. Use collect/update." });
     }
-    const item = await Stickers.addStickerToCollect(email, number, amount, autograph ?? false);
+    const item = await Stickers.addStickerToCollect(
+      email,
+      number,
+      amount,
+      autograph ?? false,
+    );
     res.status(201).json(item);
   } catch (err) {
     console.error("Erro ao adicionar à coleção:", err);
@@ -101,7 +106,12 @@ export const updateInCollection = async (req, res) => {
         .status(404)
         .json({ error: "Item não encontrado. Use collect/add para criar." });
     }
-    const item = await Stickers.updateStickerInCollect(email, number, amount, autograph ?? false);
+    const item = await Stickers.updateStickerInCollect(
+      email,
+      number,
+      amount,
+      autograph ?? false,
+    );
     res.json(item);
   } catch (err) {
     console.error("Erro ao atualizar coleção:", err);

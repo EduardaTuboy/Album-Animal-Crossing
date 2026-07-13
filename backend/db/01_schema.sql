@@ -23,6 +23,8 @@ CREATE TABLE Users (
     username VARCHAR(20),
     password VARCHAR(255),
     role VARCHAR(20),
+    acumulated_cards INTEGER DEFAULT 12,
+    last_sync TIMESTAMP DEFAULT CURRENT_TIMESTAMP - INTERVAL '48 hours',
     skin_index INTEGER DEFAULT 0,
     eyes_index INTEGER DEFAULT 0,
     hair_index INTEGER DEFAULT 0,

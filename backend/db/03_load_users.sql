@@ -1,7 +1,7 @@
 TRUNCATE TABLE Users CASCADE;
 
-INSERT INTO Users (email, username, password, role) VALUES
-('usuario@exemplo.com', 'usuario', 'senha123', 'user');
+INSERT INTO Users (email, username, password, role, acumulated_cards, last_sync) VALUES
+('usuario@exemplo.com', 'usuario', 'senha123', 'user', 12, CURRENT_TIMESTAMP - INTERVAL '48 hours');
 
 INSERT INTO Collect (email, number, amount, autograph) VALUES
 ('usuario@exemplo.com', 295, 5, false), -- Piper
