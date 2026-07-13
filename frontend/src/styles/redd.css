@@ -1,0 +1,22 @@
+.redd-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
+.redd {
+  background-color: transparent;
+  border: none;
+}
+
+.redd img {
+  width: 200px;
+  height: auto;
+}
+
+.redd-dialog {
+  width: 600px;
+  margin-top: -100px;
+}

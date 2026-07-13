@@ -1,15 +1,16 @@
-import { createFileRoute } from '@tanstack/react-router';
-import unlockedImg from '../assets/unlocked.png';
-import repeatingImg from '../assets/repeating.png';
-import missingImg from '../assets/missing.png';
-import { useStats } from '../api/stickersQueries.js';
+import { createFileRoute } from "@tanstack/react-router";
+import unlockedImg from "../assets/unlocked.png";
+import repeatingImg from "../assets/repeating.png";
+import missingImg from "../assets/missing.png";
+import { useStats } from "../api/stickersQueries.js";
+import Redd from "../components/redd.jsx";
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute("/")({
   component: DashboardStats,
 });
 
 function DashboardStats() {
-  const currentUserEmail = 'usuario@exemplo.com';
+  const currentUserEmail = "usuario@exemplo.com";
   const { data: stats = { unlocked: 0, repeating: 0, missing: 0, total: 0 } } =
     useStats(currentUserEmail);
 
@@ -18,21 +19,21 @@ function DashboardStats() {
 
   const statsList = [
     {
-      id: 'unlocked',
+      id: "unlocked",
       imgSrc: unlockedImg,
-      title: 'Unlocked',
+      title: "Unlocked",
       value: stats.unlocked,
     },
     {
-      id: 'repeating',
+      id: "repeating",
       imgSrc: repeatingImg,
-      title: 'Repeating',
+      title: "Repeating",
       value: stats.repeating,
     },
     {
-      id: 'missing',
+      id: "missing",
       imgSrc: missingImg,
-      title: 'Missing',
+      title: "Missing",
       value: stats.missing,
     },
   ];
@@ -46,7 +47,7 @@ function DashboardStats() {
           id="bar"
           style={{
             width: `${percentage}%`,
-            minWidth: 'fit-content',
+            minWidth: "fit-content",
             backgroundColor: `hsl(${percentage * 1.44}, 39%, 66%)`,
           }}
         >
@@ -65,6 +66,7 @@ function DashboardStats() {
           </div>
         ))}
       </div>
+      <Redd />
     </main>
   );
 }

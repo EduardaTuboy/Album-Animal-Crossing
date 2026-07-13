@@ -27,6 +27,12 @@ services:
       - DB_PORT=${DB_PORT}
     depends_on:
       - db
+    # 🔥 Mapeamento de arquivos para o backend (Hot Reload)
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    command: npm run dev
+
   frontend:
     build: ./frontend
     container_name: animal_crossing_frontend
@@ -37,6 +43,7 @@ services:
       - /app/node_modules
     depends_on:
       - backend
+    command: npm run dev -- --host
 
 volumes:
   pgdata:
