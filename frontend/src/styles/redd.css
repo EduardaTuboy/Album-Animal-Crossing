@@ -48,3 +48,24 @@
   height: 100px;
   margin-left: -60px;
 }
+
+/* Animation overlay container for full-screen dimming and centering */
+.animation-overlay {
+  position: fixed; /* Fixed relative to the viewport */
+  top: 0;
+  left: 0;
+  width: 100vw; /* Full viewport width and height */
+  height: 100vh;
+  background-color: #00880088; /* The requested semi-transparent green overlay */
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 9999; /* Ensure it's on top of everything, including statistics */
+}
+
+/* Specific styling for the animation image frame */
+.animation-frame {
+  max-width: 60%; /* Don't allow it to expand to full width on large screens */
+  max-height: 60%; /* Don't make it too tall on small devices */
+  display: block; /* Centers within the flex container */
+}

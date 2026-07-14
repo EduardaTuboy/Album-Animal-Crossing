@@ -5,44 +5,77 @@ import dialog1 from "../assets/Redd-dialogue-1.png";
 import dialog2 from "../assets/Redd-dialogue-2.png";
 import "../styles/redd.css";
 
-// Importe os hooks do arquivo onde você os definiu
+// 1. Import New Animation Frames (Assuming they are in assets/)
+import stickerAnim0 from "../assets/new_stickers0.png";
+import stickerAnim1 from "../assets/new_stickers1.png";
+import stickerAnim2 from "../assets/new_stickers2.png";
+import stickerAnim3 from "../assets/new_stickers3.png";
+import stickerAnim4 from "../assets/new_stickers4.png";
+import stickerAnim5 from "../assets/new_stickers5.png";
+import stickerAnim6 from "../assets/new_stickers6.png";
+
 import { useUserProfile, useClaimCard } from "../api/usersQueries.js";
+
+// Helper function to create a delay
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function Redd({ email }) {
   const [dialogStep, setDialogStep] = useState(0);
 
-  // 1. Busca o perfil usando o hook existente (isso já traz as 12 cartas!)
+  // 2. New State Variables for Animation
+  const [showOpeningAnimation, setShowOpeningAnimation] = useState(false);
+  const [currentAnimationFrame, setCurrentAnimationFrame] = useState(0);
+
+  // Put animation frames into an array for easy access
+  const animationFrames = [
+    stickerAnim0,
+    stickerAnim1,
+    stickerAnim2,
+    stickerAnim3,
+    stickerAnim4,
+    stickerAnim5,
+    stickerAnim6,
+  ];
+
   const { data: userProfile, isLoading: isProfileLoading } =
     useUserProfile(email);
   const availableCards = userProfile?.acumulated_cards || 0;
 
-  // 2. Prepara o hook de resgate que acabamos de criar
   const claimCardMutation = useClaimCard();
+
+  // 3. Modified handleClaimCard
   const handleClaimCard = async () => {
-    // Transformamos a função em async
-    // Evita cliques duplos enquanto a mutation está carregando
     if (availableCards > 0 && !claimCardMutation.isPending) {
-      // Criamos uma lista para armazenar os dados de todas as figurinhas resgatadas
+      // I. Show the dark-green overlay
+      setShowOpeningAnimation(true);
       const stickersGanhos = [];
 
-      try {
-        // Fazemos um loop baseado na quantidade de cartas que o usuário tem
-        for (let i = 0; i < availableCards; i++) {
-          // Usamos mutateAsync (em vez de mutate) para poder usar o 'await'
-          const data = await claimCardMutation.mutateAsync(email);
+      // II. Configuration: duration for each frame (in milliseconds)
+      // "some tenths of a second" - let's use 150ms per frame
+      const frameDelay = 150;
 
-          // Guardamos o número e a raridade na nossa lista
+      try {
+        // III. Play the entire animation (0 to 6) sequencially
+        // We wait for each frame to complete before showing the next.
+        for (let f = 0; f < animationFrames.length; f++) {
+          setCurrentAnimationFrame(f);
+          await delay(frameDelay); // Wait 150ms per frame
+        }
+
+        // IV. After the animation finishes, claim all cards in sequence
+        for (let i = 0; i < availableCards; i++) {
+          const data = await claimCardMutation.mutateAsync(email);
           stickersGanhos.push(
             `Figurinha ${data.sticker.number} (${data.rarityDrawn})`,
           );
         }
       } catch (error) {
-        // Se a internet cair no meio do processo, avisamos o usuário
         alert(
           error.message || "Houve um erro ao resgatar algumas de suas cartas.",
         );
       } finally {
-        // Por fim, fechamos o diálogo do Redd independentemente de sucesso ou erro
+        // VI. Hide the overlay in all cases
+        setShowOpeningAnimation(false);
         setDialogStep(0);
       }
     }
@@ -50,15 +83,29 @@ function Redd({ email }) {
 
   return (
     <div className="redd-container">
+      {/* 4. Conditional Rendering of the Animation Overlay */}
+      {showOpeningAnimation && (
+        <div className="animation-overlay">
+          <img
+            src={animationFrames[currentAnimationFrame]}
+            alt="Opening present"
+            className="animation-frame"
+          />
+        </div>
+      )}
+
       <div className="cards">
-        {/* Renderiza o badge dinamicamente se houver cartas disponíveis */}
         {availableCards > 1 && <div className="badge">{availableCards}</div>}
         {availableCards > 0 && <img src={card} alt="Card" />}
       </div>
 
       <button
         onClick={() => setDialogStep(1)}
-        disabled={claimCardMutation.isPending || isProfileLoading}
+        disabled={
+          claimCardMutation.isPending ||
+          isProfileLoading ||
+          showOpeningAnimation
+        }
       >
         <img src={redd} alt="Redd" />
       </button>
@@ -73,7 +120,10 @@ function Redd({ email }) {
           alt="Dialogue 2"
           onClick={handleClaimCard}
           style={{
-            cursor: claimCardMutation.isPending ? "not-allowed" : "pointer",
+            cursor:
+              claimCardMutation.isPending || showOpeningAnimation
+                ? "not-allowed"
+                : "pointer",
           }}
         />
       )}
