@@ -1,70 +1,49 @@
-import { useState, useEffect } from "react";
-import card from "../assets/unlocked.png"; //
-import redd from "../assets/Redd.png"; //[cite: 9]
-import dialog1 from "../assets/Redd-dialogue-1.png"; //[cite: 9]
-import dialog2 from "../assets/Redd-dialogue-2.png"; //[cite: 9]
-import "../styles/redd.css"; //[cite: 9]
+import { useState } from "react";
+import card from "../assets/unlocked.png";
+import redd from "../assets/Redd.png";
+import dialog1 from "../assets/Redd-dialogue-1.png";
+import dialog2 from "../assets/Redd-dialogue-2.png";
+import "../styles/redd.css";
 
-// Adicionado a prop 'email' para identificar o usuário logado
+// Importe os hooks do arquivo onde você os definiu
+import { useUserProfile, useClaimCard } from "../api/usersQueries.js";
+
 function Redd({ email }) {
-  const [dialogStep, setDialogStep] = useState(0); //[cite: 9]
-  const [availableCards, setAvailableCards] = useState(0); //[cite: 9]
-  const [loading, setLoading] = useState(false);
+  const [dialogStep, setDialogStep] = useState(0);
 
-  // Busca a quantidade de cartas atualizada ao carregar o componente
-  useEffect(() => {
-    const fetchUserCards = async () => {
-      if (!email) return;
+  // 1. Busca o perfil usando o hook existente (isso já traz as 12 cartas!)
+  const { data: userProfile, isLoading: isProfileLoading } =
+    useUserProfile(email);
+  const availableCards = userProfile?.acumulated_cards || 0;
 
-      try {
-        // Altere a URL base se o seu backend rodar em outra porta (ex: http://localhost:5000)
-        const response = await fetch(`/user/profile/${email}`);
-        if (response.ok) {
-          const data = await response.json();
-          // O backend retorna o perfil atualizado e sincronizado com o tempo decorrido
-          setAvailableCards(data.acumulated_cards);
-        } else {
-          console.error("Erro ao buscar o perfil do usuário.");
-        }
-      } catch (error) {
-        console.error("Erro na requisição de perfil:", error);
-      }
-    };
-
-    fetchUserCards();
-  }, [email]);
-
+  // 2. Prepara o hook de resgate que acabamos de criar
+  const claimCardMutation = useClaimCard();
   const handleClaimCard = async () => {
-    if (availableCards > 0 && !loading) {
-      setLoading(true);
+    // Transformamos a função em async
+    // Evita cliques duplos enquanto a mutation está carregando
+    if (availableCards > 0 && !claimCardMutation.isPending) {
+      // Criamos uma lista para armazenar os dados de todas as figurinhas resgatadas
+      const stickersGanhos = [];
+
       try {
-        const response = await fetch("/user/claim-card", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        });
+        // Fazemos um loop baseado na quantidade de cartas que o usuário tem
+        for (let i = 0; i < availableCards; i++) {
+          // Usamos mutateAsync (em vez de mutate) para poder usar o 'await'
+          const data = await claimCardMutation.mutateAsync(email);
 
-        if (response.ok) {
-          const data = await response.json();
-
-          // Atualiza o estado com a nova quantidade exata de cartas devolvida pelo backend
-          setAvailableCards(data.acumulatedCards);
-
-          // Opcional: Você pode usar 'data.sticker' aqui para exibir um alerta ou modal
-          // mostrando qual figurinha o usuário acabou de ganhar!
-          alert(`Parabéns! Você ganhou a figurinha: ${data.sticker.number}`);
-        } else {
-          const errorData = await response.json();
-          alert(errorData.error || "Erro ao resgatar a carta.");
+          // Guardamos o número e a raridade na nossa lista
+          stickersGanhos.push(
+            `Figurinha ${data.sticker.number} (${data.rarityDrawn})`,
+          );
         }
       } catch (error) {
-        console.error("Erro ao conectar com o servidor:", error);
-        alert("Não foi possível conectar ao servidor.");
+        // Se a internet cair no meio do processo, avisamos o usuário
+        alert(
+          error.message || "Houve um erro ao resgatar algumas de suas cartas.",
+        );
       } finally {
-        setLoading(false);
-        setDialogStep(0); //[cite: 9]
+        // Por fim, fechamos o diálogo do Redd independentemente de sucesso ou erro
+        setDialogStep(0);
       }
     }
   };
@@ -74,27 +53,32 @@ function Redd({ email }) {
       <div className="cards">
         {/* Renderiza o badge dinamicamente se houver cartas disponíveis */}
         {availableCards > 1 && <div className="badge">{availableCards}</div>}
-        {availableCards > 0 && <img src={card} alt="Card" />} {/*[cite: 9] */}
+        {availableCards > 0 && <img src={card} alt="Card" />}
       </div>
 
-      <button onClick={() => setDialogStep(1)} disabled={loading}>
-        <img src={redd} alt="Redd" /> {/*[cite: 9] */}
+      <button
+        onClick={() => setDialogStep(1)}
+        disabled={claimCardMutation.isPending || isProfileLoading}
+      >
+        <img src={redd} alt="Redd" />
       </button>
 
-      {dialogStep === 1 && ( //[cite: 9]
-        <img src={dialog1} alt="Dialogue 1" onClick={() => setDialogStep(2)} /> //[cite: 9]
+      {dialogStep === 1 && (
+        <img src={dialog1} alt="Dialogue 1" onClick={() => setDialogStep(2)} />
       )}
 
-      {dialogStep === 2 && ( //[cite: 9]
+      {dialogStep === 2 && (
         <img
           src={dialog2}
           alt="Dialogue 2"
           onClick={handleClaimCard}
-          style={{ cursor: loading ? "not-allowed" : "pointer" }}
+          style={{
+            cursor: claimCardMutation.isPending ? "not-allowed" : "pointer",
+          }}
         />
       )}
     </div>
   );
 }
 
-export default Redd; //[cite: 9]
+export default Redd;

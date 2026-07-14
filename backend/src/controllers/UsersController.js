@@ -1,4 +1,5 @@
 import * as Users from "../models/Users.js";
+import * as Stickers from "../models/Stickers.js"; // <-- ADICIONE ESTA LINHA
 
 export const updateAvatar = async (req, res) => {
   const { email, skinIndex, eyesIndex, hairIndex, hairColor, eyesColor } =
@@ -178,7 +179,7 @@ export const claimCard = async (req, res) => {
     }
 
     // 3. Busca todas as figurinhas para realizar a conferência de raridade[cite: 7]
-    const allStickers = await Users.getAllStickers();
+    const allStickers = await Stickers.getAllStickers(); // <-- MUDOU AQUI
     if (!allStickers || allStickers.length === 0) {
       return res
         .status(500)
@@ -221,30 +222,37 @@ export const claimCard = async (req, res) => {
     );
 
     // 8. Salva a nova figurinha no álbum do usuário usando as funções existentes
-    // Verifica se o usuário já possui a figurinha na tabela Collect[cite: 7]
-    const existingCollectItem = await Users.getCollectItem(
+    const existingCollectItem = await Stickers.getCollectItem(
+      // <-- MUDOU AQUI
       email,
       foundStickerId,
     );
 
     let claimedSticker;
     if (existingCollectItem) {
-      // Se já possui, atualiza incrementando o 'amount' e preservando o status de 'autograph'[cite: 7]
-      claimedSticker = await Users.updateStickerInCollect(
+      claimedSticker = await Stickers.updateStickerInCollect(
+        // <-- MUDOU AQUI
         email,
         foundStickerId,
         existingCollectItem.amount + 1,
         existingCollectItem.autograph,
       );
     } else {
-      // Se não possui, insere um novo registro com amount = 1[cite: 7]
-      claimedSticker = await Users.addStickerToCollect(
+      claimedSticker = await Stickers.addStickerToCollect(
+        // <-- MUDOU AQUI
         email,
         foundStickerId,
         1,
         false,
       );
     }
+
+    return res.status(200).json({
+      message: "Figurinha resgatada com sucesso!",
+      rarityDrawn: targetRarity,
+      acumulatedCards: newCardCount,
+      sticker: claimedSticker,
+    });
 
     return res.status(200).json({
       message: "Figurinha resgatada com sucesso!",
